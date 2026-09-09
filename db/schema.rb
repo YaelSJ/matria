@@ -28,10 +28,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_183104) do
   end
 
   create_table "cases", force: :cascade do |t|
-    t.boolean "consent"
+    t.boolean "consent", default: false, null: false
     t.text "content"
     t.datetime "created_at", null: false
     t.bigint "representative_id"
+    t.string "status", default: "pending", null: false
     t.text "summary"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -53,11 +54,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_183104) do
     t.datetime "created_at", null: false
     t.string "role"
     t.datetime "updated_at", null: false
+    t.index ["chat_id", "created_at"], name: "index_messages_on_chat_id_and_created_at"
     t.index ["chat_id"], name: "index_messages_on_chat_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "age"
+    t.date "birth_date"
     t.string "city"
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -69,11 +71,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_183104) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
-    t.string "role"
+    t.string "role", default: "user", null: false
     t.string "sex"
     t.string "state"
     t.datetime "updated_at", null: false
-    t.string "user_contry"
+    t.string "user_country"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
