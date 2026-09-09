@@ -1,7 +1,7 @@
 class RefineInitialSchema < ActiveRecord::Migration[8.1]
   def change
     # 1. Renombrar tipo en users sin perder datos
-    rename_column :users, :user_contry, :country
+    rename_column :users, :user_contry, :user_country
 
     # 2. Agregar birth_date y respaldar los datos de age
     add_column :users, :birth_date, :date
