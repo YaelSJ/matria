@@ -1,0 +1,33 @@
+<div class="dashboard">
+  <div class="dashboard__content">
+    <h1 class="dashboard__title">Mi dashboard</h1>
+
+    <% if current_user.user? %>
+      <% if @case %>
+        <% status_labels = {
+          "pending" => "Pendiente",
+          "in_review" => "En revisión",
+          "closed" => "Cerrado"
+        } %>
+
+        <section class="dashboard__card">
+          <h2 class="dashboard__card-title">Mi caso</h2>
+
+          <span class="dashboard__status">
+            <%= status_labels.fetch(@case.status) %>
+          </span>
+
+          <p class="dashboard__label">Última actualización</p>
+
+          <p class="dashboard__date">
+            <%= @case.updated_at.strftime("%d/%m/%Y") %>
+          </p>
+        </section>
+
+        <div class="dashboard__message">
+          <p>Estamos aquí para acompañarte</p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
