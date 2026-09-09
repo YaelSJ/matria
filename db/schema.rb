@@ -32,6 +32,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_183104) do
     t.text "content"
     t.datetime "created_at", null: false
     t.bigint "representative_id"
+    t.string "risk_level"
     t.string "status", default: "pending", null: false
     t.text "summary"
     t.datetime "updated_at", null: false

@@ -16,4 +16,6 @@ class Case < ApplicationRecord
   # Validaciones
   validates :status, presence: true
   validates :consent, acceptance: { accept: true, message: "debe ser otorgado para registrar el caso" }
+  validates :risk_level,
+            inclusion: { in: %w[low medium high critical] }
 end
