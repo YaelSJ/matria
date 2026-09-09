@@ -6,15 +6,6 @@ class RefineInitialSchema < ActiveRecord::Migration[8.1]
     # 2. Agregar birth_date y respaldar los datos de age
     add_column :users, :birth_date, :date
 
-    reversible do |dir|
-      dir.up do
-        execute <<-SQL
-          UPDATE users
-          SET birth_date = (CURRENT_DATE - (age || ' years')::interval)::date
-          WHERE age IS NOT NULL;
-        SQL
-      end
-    end
 
     remove_column :users, :age, :integer
 
