@@ -3,7 +3,7 @@ class CaseFile < ApplicationRecord
   has_many_attached :files
   has_one_attached :audio
 
-  enum :kind, {
+  enum :file_type, {
     opening_testimony: "opening_testimony",
     additional_audio: "additional_audio",
     ai_chat: "ai_chat",
