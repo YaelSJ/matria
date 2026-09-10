@@ -29,7 +29,7 @@ class CasesController < ApplicationController
     redirect_to case_path(@case), alert: e.message
   end
 
-    def assign
+  def assign
     case_record = Case.find(params[:id])
 
     Case.transaction do
@@ -54,7 +54,7 @@ class CasesController < ApplicationController
     redirect_to dashboard_path(tab: "assigned"),
                 notice: "El caso fue asignado a ti."
   end
-  
+
   private
 
   def set_case
@@ -76,5 +76,5 @@ class CasesController < ApplicationController
     return if transcript.nil? || @case.opening_testimony.nil?
 
     @case.opening_testimony.update!(transcript: transcript)
-
+  end
 end
