@@ -11,6 +11,10 @@ class CasePolicy < ApplicationPolicy
     end
   end
 
+  def update?
+    user&.user? && record.user_id == user.id && record.editable_by_user?
+  end
+
   def assign?
     return false unless user
 
