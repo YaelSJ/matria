@@ -10,6 +10,7 @@ class Case < ApplicationRecord
   enum :status, {
     pending: "pending",
     in_review: "in_review",
+    approved: "approved",
     closed: "closed"
   }, default: :pending
 
