@@ -22,8 +22,8 @@ create_user = lambda do |name, email, role, index|
       city: "Ciudad de México",
       phone_number: "55100000#{format("%02d", index)}",
       birth_date: Date.new(1985 + (index % 12), (index % 12) + 1, (index % 25) + 1),
-      gender: "Mujer",
-      sex: "Femenino"
+      gender: "Femenino",
+      sex: "Mujer"
     )
     user.save!
   end
