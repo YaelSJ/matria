@@ -15,6 +15,6 @@ Rails.application.routes.draw do
 
 
   get "dashboard", to: "dashboards#show", as: :dashboard
-
+  patch "cases/:id/assign", to: "cases#assign", as: :assign_case
 
 end

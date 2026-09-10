@@ -2,6 +2,13 @@
   <div class="dashboard__content">
     <h1 class="dashboard__title">Mi dashboard</h1>
 
+    <% if current_user.representative? %>
+      <p class="dashboard__representative-state">
+        Estado de atención:
+        <strong><%= current_user.state.presence || "Sin estado asignado" %></strong>
+      </p>
+    <% end %>
+
     <% if current_user.user? && @case %>
       <% status_labels = {
         "draft" => "Borrador / Sin enviar",
