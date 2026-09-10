@@ -1,0 +1,52 @@
+<div class="case-review">
+  <h1>Editar mi caso</h1>
+
+  <%= form_with model: @case do |form| %>
+    <fieldset>
+      <legend>Datos personales</legend>
+      <%= fields_for :user, current_user do |user_form| %>
+        <%= user_form.label :name, "Nombre" %>
+        <%= user_form.text_field :name %>
+        <%= user_form.label :last_name, "Apellidos" %>
+        <%= user_form.text_field :last_name %>
+        <%= user_form.label :state, "Estado" %>
+        <%= user_form.text_field :state %>
+        <%= user_form.label :city, "Ciudad" %>
+        <%= user_form.text_field :city %>
+        <%= user_form.label :phone_number, "Teléfono" %>
+        <%= user_form.telephone_field :phone_number %>
+        <%= user_form.label :user_country, "País" %>
+        <%= user_form.text_field :user_country %>
+        <%= user_form.label :birth_date, "Fecha de nacimiento" %>
+        <%= user_form.date_field :birth_date %>
+        <%= user_form.label :gender, "Género" %>
+        <%= user_form.text_field :gender %>
+        <%= user_form.label :sex, "Sexo" %>
+        <%= user_form.text_field :sex %>
+      <% end %>
+    </fieldset>
+
+    <fieldset>
+      <legend>Descripción del caso</legend>
+      <%= form.label :content, "Describe tu caso" %>
+      <%= form.text_area :content, rows: 8 %>
+      <%= form.check_box :consent %>
+      <%= form.label :consent, "Confirmo que deseo compartir esta información" %>
+    </fieldset>
+
+    <fieldset>
+      <legend>Testimonio inicial</legend>
+      <% if @case.opening_testimony %>
+        <%= label_tag "case_opening_testimony_transcript", "Transcripción" %>
+        <%= text_area_tag "case[opening_testimony_transcript]",
+                          @case.opening_testimony.transcript,
+                          rows: 10 %>
+      <% else %>
+        <p>Regresa a la sección de grabación para crear tu testimonio inicial.</p>
+      <% end %>
+    </fieldset>
+
+    <%= form.submit "Guardar cambios", class: "dashboard__button" %>
+    <%= link_to "Cancelar", case_path(@case), class: "dashboard__button dashboard__button--secondary" %>
+  <% end %>
+</div>

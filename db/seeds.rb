@@ -7,7 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-password = "Password123!"
+password = "123456"
 
 create_user = lambda do |name, email, role, index|
   User.find_or_initialize_by(email: email).tap do |user|
@@ -53,7 +53,7 @@ users = 1.upto(10).map do |index|
     index
   )
 
-  status = index <= 3 ? :pending : :approved
+  status = index <= 3 ? :draft : :approved
   representative = representatives[(index - 1) % representatives.length]
 
   case_record = Case.find_or_initialize_by(user: user)
@@ -83,6 +83,7 @@ users = 1.upto(10).map do |index|
     title: "Documento de Usuaria #{index}"
   )
   case_file.assign_attributes(
+    kind: "opening_testimony",
     file_type: "application/pdf",
     state: "Ciudad de México",
     document_number: "DOC-#{format("%03d", index)}",
@@ -96,7 +97,8 @@ end
 
 puts "Seed completada:"
 puts "- Usuarias: #{users.count}"
-puts "- Casos pendientes: #{Case.where(status: :pending).count}"
+puts "- Casos en borrador: #{Case.where(status: :draft).count}"
+puts "- Casos en revisión: #{Case.where(status: :in_review).count}"
 puts "- Casos aprobados: #{Case.where(status: :approved).count}"
 puts "- Representantes: #{representatives.count}"
 puts "- Administradores: #{User.where(role: :admin).count}"

@@ -1,0 +1,68 @@
+<div class="case-review">
+  <div class="case-review__header">
+    <h1>Revisión de mi caso</h1>
+    <span><%= @case.status.humanize %></span>
+  </div>
+
+  <% if @case.changes_requested? %>
+    <p>La representante solicitó información adicional. Puedes actualizar tu caso y enviarlo nuevamente.</p>
+  <% elsif @case.in_review? %>
+    <p>Tu caso fue enviado y está en revisión. La información principal está bloqueada.</p>
+  <% elsif @case.editable_by_user? %>
+    <p>Revisa la información antes de enviarla a una representante.</p>
+  <% end %>
+
+  <% if @case.editable_by_user? %>
+    <%= link_to "Editar información", edit_case_path(@case), class: "dashboard__button" %>
+  <% end %>
+
+  <section aria-labelledby="case-details-title">
+    <h2 id="case-details-title">Datos personales</h2>
+    <dl>
+      <dt>Nombre</dt>
+      <dd><%= [@case.user.name, @case.user.last_name].compact.join(" ") %></dd>
+      <dt>Estado y ciudad</dt>
+      <dd><%= [@case.user.state, @case.user.city].compact.join(", ") %></dd>
+      <dt>Teléfono</dt>
+      <dd><%= @case.user.phone_number.presence || "No capturado" %></dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="case-content-title">
+    <h2 id="case-content-title">Descripción del caso</h2>
+    <p><%= @case.content.presence || "Aún no has agregado una descripción." %></p>
+  </section>
+
+  <section aria-labelledby="testimony-title">
+    <h2 id="testimony-title">Testimonio inicial</h2>
+    <% if @case.opening_testimony&.transcript.present? %>
+      <p><%= @case.opening_testimony.transcript %></p>
+    <% else %>
+      <p>Aún no hay una transcripción del testimonio inicial.</p>
+    <% end %>
+  </section>
+
+  <section aria-labelledby="files-title">
+    <h2 id="files-title">Archivos del caso</h2>
+    <% if @case.case_files.any? %>
+      <ul>
+        <% @case.case_files.each do |case_file| %>
+          <li><%= case_file.title %> (<%= case_file.kind.humanize %>)</li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>Aún no hay archivos agregados.</p>
+    <% end %>
+  </section>
+
+  <% if @case.editable_by_user? %>
+    <%= button_to "Confirmar y enviar a revisión",
+                  submit_for_review_case_path(@case),
+                  method: :post,
+                  class: "dashboard__button",
+                  disabled: !@case.ready_for_submission? %>
+    <% unless @case.ready_for_submission? %>
+      <p>Para enviar necesitas completar la descripción, aceptar el consentimiento y contar con la transcripción del testimonio inicial.</p>
+    <% end %>
+  <% end %>
+</div>

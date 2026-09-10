@@ -4,8 +4,9 @@
 
     <% if current_user.user? && @case %>
       <% status_labels = {
-        "pending" => "Pendiente",
+        "draft" => "Borrador / Sin enviar",
         "in_review" => "En revisión",
+        "changes_requested" => "Observaciones / Acción requerida",
         "approved" => "Aprobado",
         "closed" => "Cerrado"
       } %>
@@ -27,12 +28,11 @@
           <%= @case.updated_at.strftime("%d/%m/%Y") %>
         </p>
 
-        <button
-          type="button"
-          class="dashboard__button"
-          >
-          Ver mi caso
-        </button>
+        <%= link_to(
+          @case.editable_by_user? ? "Continuar con mi caso pendiente" : "Ver mi caso",
+          case_path(@case),
+          class: "dashboard__button"
+        ) %>
       </section>
 
       <div class="dashboard__shortcuts">
