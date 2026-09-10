@@ -24,6 +24,6 @@ class User < ApplicationRecord
   end
 #se tiene que cambiar despues
   def create_case_for_user
-    Case.create!(user: self, consent: true, status: "pending", risk_level: "low")
+    Case.create!(user: self, consent: true, status: "draft", risk_level: "low")
   end
 end
