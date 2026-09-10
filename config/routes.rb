@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :cases do
-    resources :case_files, except: [:index, :new]
+    resources :case_files, except: [:index]
   end
 
 

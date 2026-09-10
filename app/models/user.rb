@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  after_create :create_case_for_user #se tiene que cambiar despues
 
   has_many :chats, dependent: :destroy
   has_one :case, dependent: :destroy
@@ -20,5 +21,9 @@ class User < ApplicationRecord
 
     today = Date.current
     today.year - birth_date.year - (today.strftime("%m%d") < birth_date.strftime("%m%d") ? 1 : 0)
+  end
+#se tiene que cambiar despues
+  def create_case_for_user
+    Case.create!(user: self, consent: true, status: "pending", risk_level: "low")
   end
 end

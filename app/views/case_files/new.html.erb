@@ -1,0 +1,16 @@
+<h1>Subir un archivo prueba</h1>
+
+<%= simple_form_for [@case, @case_file] do |f| %>
+  <div>
+    <%= f.input :audio, as: :file %>
+    <%= f.input :title %>
+    <%= f.input :state %>
+  </div>
+
+  <div>
+    <%= f.submit "subir audio" %>
+  </div>
+<% end %>
+
+
+<%# cambiar el nombre de la vista, create no tiene views, ejecutará el create pero no el new este lo generará chats %>
