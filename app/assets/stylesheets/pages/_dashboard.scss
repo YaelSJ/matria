@@ -17,6 +17,16 @@
     font-weight: 700;
   }
 
+  &__representative-state {
+    margin: -16px 0 24px;
+    color: $matria-purple;
+    font-size: 0.875rem;
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
   &__card {
     padding: 20px;
     background-color: $matria-cream;
@@ -49,6 +59,34 @@
     border-radius: 999px;
     font-size: 0.875rem;
     font-weight: 600;
+
+    &--risk-low {
+      background-color: rgba($green, 0.5);
+      color: $matria-charcoal;
+    }
+
+    &--risk-medium {
+      background-color: rgba($yellow, 0.5);
+      color: $matria-charcoal;
+    }
+
+    &--risk-high {
+      background-color: rgba($matria-orange, 0.5);
+      color: $matria-charcoal;
+    }
+
+    &--risk-critical {
+      background-color: rgba($red, 0.5);
+      color: $matria-charcoal;
+    }
+
+    &--risk-low,
+    &--risk-medium,
+    &--risk-high,
+    &--risk-critical {
+      padding: 4px 10px;
+      font-size: 0.8125rem;
+    }
   }
 
   &__label {
@@ -213,6 +251,10 @@
       width: auto;
       margin-top: 0;
     }
+  }
+
+  &__assignment-form {
+    flex: 1 1 120px;
   }
 
   &__button {
