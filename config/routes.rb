@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :cases do
+    member do
+      post :submit_for_review
+    end
+
     resources :case_files, except: [:index, :new]
   end
 
