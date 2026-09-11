@@ -12,6 +12,7 @@
     <% if current_user.user? && @case %>
       <% status_labels = {
         "draft" => "Borrador / Sin enviar",
+        "pending_review" => "Pendiente de revisión",
         "in_review" => "En revisión",
         "changes_requested" => "Observaciones / Acción requerida",
         "approved" => "Aprobado",

@@ -3,7 +3,7 @@ require "test_helper"
 class CaseTest < ActiveSupport::TestCase
   test "is not ready without the opening testimony transcript" do
     case_record = build_case
-    case_record.case_files.create!(title: "Testimonio", state: "CDMX", kind: :opening_testimony)
+    case_record.case_files.create!(title: "Testimonio", state: "CDMX", file_type: :opening_testimony)
 
     assert_not case_record.ready_for_submission?
     assert_raises(ActiveRecord::RecordInvalid) { case_record.submit_for_review! }
@@ -14,7 +14,7 @@ class CaseTest < ActiveSupport::TestCase
     case_record.case_files.create!(
       title: "Testimonio",
       state: "CDMX",
-      kind: :opening_testimony,
+      file_type: :opening_testimony,
       transcript: "Mi testimonio inicial"
     )
 

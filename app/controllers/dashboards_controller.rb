@@ -3,9 +3,10 @@ class DashboardsController < ApplicationController
     if current_user.user?
       @case = policy_scope(Case).first
       authorize @case, :show? if @case
-    elsif current_user.representative?
+    elsif current_user.representative? || current_user.admin?
       @state_cases = policy_scope(Case)
                      .includes(:representative)
+                     .where(status: %i[pending_review in_review changes_requested])
                      .in_order_of(:risk_level, %w[critical high medium low])
 
       @assigned_cases = @state_cases.where(
