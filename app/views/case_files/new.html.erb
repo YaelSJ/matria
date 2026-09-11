@@ -1,6 +1,10 @@
 <h1>Subir un archivo prueba</h1>
 
-<%= simple_form_for [@case, @case_file] do |f| %>
+<%= simple_form_for [@case, @case_file],
+      html:{
+        class: "audio-recorder",
+        data: { controller: "audio-recorder" }
+      } do |f| %>
   <div>
     <%= f.input :audio, as: :file %>
     <%= f.input :title %>
@@ -8,7 +12,21 @@
   </div>
 
   <div>
-    <%= f.submit "subir audio" %>
+    <button
+      type="button"
+      data-action="click->audio-recorder#start">
+      Start
+    </button>
+
+    <button
+      type="button"
+      data-action="click->audio-recorder#stop">
+      Stop
+    </button>
+  </div>
+
+  <div>
+    <%= f.submit "Enviar" %>
   </div>
 <% end %>
 
