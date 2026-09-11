@@ -1,25 +1,24 @@
-<%- if controller_name != 'sessions' %>
-  <p><%= link_to "Iniciar sesión", new_session_path(resource_name), class: "btn-iniciarsesion" %></p>
+<% if controller_name != "sessions" %>
+  <p>
+    ¿Ya tienes una cuenta?
+    <%= link_to "Inicia sesión", new_session_path(resource_name) %>
+  </p>
 <% end %>
 
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <p><%= link_to "Registrarse", new_registration_path(resource_name), class: "btn-registrarse" %></p>
+<% if devise_mapping.registerable? && controller_name != "registrations" %>
+  <p>
+    ¿Aún no tienes una cuenta?
+    <%= link_to "Regístrate", new_registration_path(resource_name) %>
+  </p>
 <% end %>
 
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <p><%= link_to "Olvidaste tu contraseña?", new_password_path(resource_name), class: "btn-olvidastecontraseña" %></p>
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <p><%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <p><%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %></p>
-<% end %>
-
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <p><%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %></p>
-  <% end %>
+<% if devise_mapping.recoverable? &&
+      controller_name != "passwords" &&
+      controller_name != "registrations" %>
+  <p>
+    <%= link_to(
+      "¿Olvidaste tu contraseña?",
+      new_password_path(resource_name)
+    ) %>
+  </p>
 <% end %>

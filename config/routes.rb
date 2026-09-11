@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users,
              controllers: { registrations: "users/registrations" }
-  root to: "pages#home"
 
+  authenticated :user do
+    root to: "dashboards#show", as: :authenticated_root
+  end
+
+  devise_scope :user do
+    root to: "devise/sessions#new"
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 
