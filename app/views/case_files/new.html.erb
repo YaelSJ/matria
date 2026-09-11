@@ -6,20 +6,22 @@
         data: { controller: "audio-recorder" }
       } do |f| %>
   <div>
-    <%= f.input :audio, as: :file %>
+    <%= f.input :audio, as: :file, input_html: { data: { audio_recorder_target: "audioInput"}} %>
     <%= f.input :title %>
-    <%= f.input :state %>
   </div>
 
   <div>
     <button
       type="button"
+      data-audio-recorder-target="startButton"
       data-action="click->audio-recorder#start">
       Start
     </button>
 
     <button
       type="button"
+      disabled
+      data-audio-recorder-target="stopButton"
       data-action="click->audio-recorder#stop">
       Stop
     </button>
@@ -29,6 +31,3 @@
     <%= f.submit "Enviar" %>
   </div>
 <% end %>
-
-
-<%# cambiar el nombre de la vista, create no tiene views, ejecutará el create pero no el new este lo generará chats %>

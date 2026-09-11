@@ -17,8 +17,7 @@ class CaseFilesController < ApplicationController
 
   end
 
-
-
+  
   private
 
   def case_files_params
