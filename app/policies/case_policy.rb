@@ -22,7 +22,9 @@ class CasePolicy < ApplicationPolicy
   end
 
   def start_review?
-    user&.admin? || (user&.representative? && record.representative_id == user.id && record.pending_review?)
+    user&.representative? &&
+      record.representative_id == user.id &&
+      record.pending_review?
   end
 
   def assign?

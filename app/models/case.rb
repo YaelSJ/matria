@@ -7,7 +7,6 @@ class Case < ApplicationRecord
 
   validates :user_id, uniqueness: true
 
-  # Estados del caso
   enum :status, {
     draft: "draft",
     pending_review: "pending_review",
@@ -17,7 +16,12 @@ class Case < ApplicationRecord
     closed: "closed"
   }, default: :draft
 
-  # Validaciones
+  DECISION_STATUSES = %w[
+    approved
+    changes_requested
+    closed
+  ].freeze
+
   validates :status, presence: true
   validates :consent, acceptance: { accept: true, message: "debe ser otorgado para registrar el caso" }
   validates :risk_level,
@@ -65,10 +69,18 @@ class Case < ApplicationRecord
   end
 
   def decide!(representative, next_status, comment: nil)
-    raise ActiveRecord::RecordNotFound unless representative.admin? || representative_id == representative.id
+    unless representative.admin? || representative_id == representative.id
+      raise ActiveRecord::RecordNotFound
+    end
 
-    event_type = next_status.to_s
-    if event_type.in?(%w[changes_requested closed]) && comment.blank?
+    next_status = next_status.to_s
+
+    unless in_review? && DECISION_STATUSES.include?(next_status)
+      errors.add(:base, "La decisión no corresponde al estado actual del caso")
+      raise ActiveRecord::RecordInvalid.new(self)
+    end
+
+    if next_status.in?(%w[changes_requested closed]) && comment.blank?
       errors.add(:base, "El comentario es obligatorio")
       raise ActiveRecord::RecordInvalid.new(self)
     end
@@ -76,8 +88,13 @@ class Case < ApplicationRecord
     transaction do
       previous_status = status
       update!(status: next_status)
-      case_events.create!(user: representative, event_type: event_type,
-                          from_status: previous_status, to_status: status, comment: comment)
+      case_events.create!(
+        user: representative,
+        event_type: next_status,
+        from_status: previous_status,
+        to_status: status,
+        comment: comment
+      )
     end
   end
 

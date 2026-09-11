@@ -1,46 +1,150 @@
-<h2>Registrarse</h2>
+<main class="authentication authentication--registration">
+  <div class="authentication__container">
+    <section
+      class="authentication__card"
+      aria-labelledby="registration-title"
+    >
+      <header class="authentication__header">
+        <h1 id="registration-title" class="authentication__title">
+          Crea tu cuenta
+        </h1>
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+        <p class="authentication__description">
+          Completa tus datos para comenzar tu proceso en MatrIA.
+        </p>
+      </header>
 
-  <div class="form-inputs">
-    <%= f.input :name, label: "Nombre", required: true %>
-    <%= f.input :last_name, label: "Apellido", required: true %>
+      <%= simple_form_for(
+        resource,
+        as: resource_name,
+        url: registration_path(resource_name)
+      ) do |f| %>
+        <%= f.error_notification %>
 
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
+        <fieldset class="authentication__section">
+          <legend class="authentication__section-title">
+            Datos personales
+          </legend>
 
-    <%= f.input :birth_date,
-                label: "Fecha de nacimiento",
-                as: :date,
-                start_year: Date.today.year - 100,
-                end_year: Date.today.year,
-                order: [:day, :month, :year] %>
+          <div class="authentication__grid">
+            <%= f.input(
+              :name,
+              label: "Nombre",
+              required: true
+            ) %>
 
-    <%= f.input :gender, label: "Género" %>
-    <%= f.input :sex, label: "Sexo" %>
+            <%= f.input(
+              :last_name,
+              label: "Apellido",
+              required: true
+            ) %>
 
-    <%= f.input :state, label: "Estado / Provincia" %>
-    <%= f.input :city, label: "Ciudad" %>
-    <%= f.input :user_country, label: "País", as: :string %>
+            <%= f.input(
+              :birth_date,
+              label: "Fecha de nacimiento",
+              as: :date,
+              start_year: Date.current.year - 100,
+              end_year: Date.current.year,
+              order: [:day, :month, :year],
+              wrapper_html: {
+                class: "authentication__field--full"
+              }
+            ) %>
 
-    <%= f.input :password,
-                label: "Contraseña",
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
+            <%= f.input(
+              :gender,
+              label: "Género"
+            ) %>
 
-    <%= f.input :password_confirmation,
-                label: "Confirmar contraseña",
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+            <%= f.input(
+              :sex,
+              label: "Sexo"
+            ) %>
+          </div>
+        </fieldset>
+
+        <fieldset class="authentication__section">
+          <legend class="authentication__section-title">
+            Ubicación
+          </legend>
+
+          <div class="authentication__grid">
+            <%= f.input(
+              :state,
+              label: "Estado / Provincia"
+            ) %>
+
+            <%= f.input(
+              :city,
+              label: "Ciudad"
+            ) %>
+
+            <%= f.input(
+              :user_country,
+              label: "País",
+              as: :string,
+              wrapper_html: {
+                class: "authentication__field--full"
+              }
+            ) %>
+          </div>
+        </fieldset>
+
+        <fieldset class="authentication__section">
+          <legend class="authentication__section-title">
+            Datos de acceso
+          </legend>
+
+          <div class="authentication__grid">
+            <%= f.input(
+              :email,
+              label: "Correo electrónico",
+              required: true,
+              autofocus: true,
+              input_html: {
+                autocomplete: "email"
+              },
+              wrapper_html: {
+                class: "authentication__field--full"
+              }
+            ) %>
+
+            <%= f.input(
+              :password,
+              label: "Contraseña",
+              required: true,
+              hint: (
+                "#{@minimum_password_length} caracteres como mínimo" if
+                  @minimum_password_length
+              ),
+              input_html: {
+                autocomplete: "new-password"
+              }
+            ) %>
+
+            <%= f.input(
+              :password_confirmation,
+              label: "Confirmar contraseña",
+              required: true,
+              input_html: {
+                autocomplete: "new-password"
+              }
+            ) %>
+          </div>
+        </fieldset>
+
+        <div class="authentication__actions">
+          <%= f.button(
+            :submit,
+            "Crear mi cuenta",
+            class: "authentication__submit"
+          ) %>
+        </div>
+      <% end %>
+
+      <div class="authentication__links">
+        <%= render "devise/shared/links" %>
+      </div>
+    </section>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Registrarse", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</main>

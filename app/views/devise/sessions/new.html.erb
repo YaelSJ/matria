@@ -1,21 +1,61 @@
-<h2>Inicia tu sesión</h2>
+<main class="authentication">
+  <div class="authentication__container">
+    <section
+      class="authentication__card"
+      aria-labelledby="sign-in-title"
+    >
+      <header class="authentication__header">
+        <h1 id="sign-in-title" class="authentication__title">
+          Inicia tu sesión
+        </h1>
 
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: false,
-                autofocus: true,
-                class: "form-control",
-                input_html: { autocomplete: "email" } %>
-    <%= f.input :password,
-                required: false,
-                input_html: { autocomplete: "current-password" } %>
-    <%= f.input :remember_me, label: "Recordarme", as: :boolean if devise_mapping.rememberable? %>
+        <p class="authentication__description">
+          Ingresa para continuar con tu proceso en MatrIA.
+        </p>
+      </header>
+
+      <%= simple_form_for(
+        resource,
+        as: resource_name,
+        url: session_path(resource_name)
+      ) do |f| %>
+        <div class="authentication__section">
+          <%= f.input(
+            :email,
+            label: "Correo electrónico",
+            required: true,
+            autofocus: true,
+            input_html: { autocomplete: "email" }
+          ) %>
+
+          <%= f.input(
+            :password,
+            label: "Contraseña",
+            required: true,
+            input_html: { autocomplete: "current-password" }
+          ) %>
+
+          <% if devise_mapping.rememberable? %>
+            <%= f.input(
+              :remember_me,
+              label: "Recordarme",
+              as: :boolean
+            ) %>
+          <% end %>
+        </div>
+
+        <div class="authentication__actions">
+          <%= f.button(
+            :submit,
+            "Iniciar sesión",
+            class: "authentication__submit"
+          ) %>
+        </div>
+      <% end %>
+
+      <div class="authentication__links">
+        <%= render "devise/shared/links" %>
+      </div>
+    </section>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Iniciar Sesión", class: "btn-iniciarsesion" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</main>
