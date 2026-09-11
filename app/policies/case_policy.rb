@@ -28,10 +28,7 @@ class CasePolicy < ApplicationPolicy
   end
 
   def assign?
-    user&.representative? &&
-      show? &&
-      record.representative_id.nil? &&
-      record.pending_review?
+    user&.admin? || (user&.representative? && show? && record.representative_id.nil? && record.pending_review?)
   end
 
   class Scope < ApplicationPolicy::Scope
