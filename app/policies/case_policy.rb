@@ -22,19 +22,16 @@ class CasePolicy < ApplicationPolicy
   end
 
   def start_review?
-    user&.admin? || (user&.representative? && record.representative_id == user.id && record.pending_review?)
+    user&.representative? &&
+      record.representative_id == user.id &&
+      record.pending_review?
   end
 
   def assign?
-    user&.admin? || (user&.representative? && show? && record.representative_id.nil? && record.pending_review?)
-  end
-
-  def assign?
-    return false unless user
-
-    user.representative? &&
+    user&.representative? &&
       show? &&
-      record.representative_id.nil?
+      record.representative_id.nil? &&
+      record.pending_review?
   end
 
   class Scope < ApplicationPolicy::Scope
