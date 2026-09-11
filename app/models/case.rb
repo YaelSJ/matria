@@ -44,9 +44,9 @@ class Case < ApplicationRecord
     raise ActiveRecord::RecordInvalid.new(self), "El caso no está pendiente de revisión" unless pending_review?
 
     transaction do
-      update!(representative: representative, status: :in_review)
+      update!(representative: representative)
       case_events.create!(user: representative, event_type: "assigned",
-                          from_status: "pending_review", to_status: "in_review")
+                          from_status: "pending_review", to_status: "pending_review")
     end
   end
 

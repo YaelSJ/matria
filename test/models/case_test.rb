@@ -20,7 +20,7 @@ class CaseTest < ActiveSupport::TestCase
 
     case_record.submit_for_review!
 
-    assert case_record.in_review?
+    assert case_record.pending_review?
     assert_not case_record.editable_by_user?
   end
 
@@ -35,11 +35,12 @@ class CaseTest < ActiveSupport::TestCase
       last_name: "Prueba"
     )
 
-    Case.create!(
-      user: user,
-      content: "Descripción del caso",
-      consent: true,
-      risk_level: "low"
-    )
+    user.case.tap do |case_record|
+      case_record.update!(
+        content: "Descripción del caso",
+        consent: true,
+        risk_level: "low"
+      )
+    end
   end
 end
