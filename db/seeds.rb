@@ -83,7 +83,7 @@ users = 1.upto(10).map do |index|
     title: "Documento de Usuaria #{index}"
   )
   case_file.assign_attributes(
-    file_type: "document",
+    file_type: "opening_testimony",
     state: "Ciudad de México",
     document_number: "DOC-#{format("%03d", index)}",
     transcript: "Transcripción de prueba de Usuaria #{index}.",
