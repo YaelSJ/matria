@@ -53,8 +53,22 @@ users = 1.upto(10).map do |index|
     index
   )
 
-  status = index <= 3 ? :draft : :approved
-  representative = representatives[(index - 1) % representatives.length]
+  status, representative = case index
+                           when 1..3
+                             [:draft, nil]
+                           when 4..5
+                             [:pending_review, nil]
+                           when 6
+                             [:pending_review, representatives[0]]
+                           when 7
+                             [:in_review, representatives[0]]
+                           when 8
+                             [:changes_requested, representatives[1]]
+                           when 9
+                             [:approved, representatives[1]]
+                           when 10
+                             [:closed, representatives[2]]
+                           end
 
   case_record = Case.find_or_initialize_by(user: user)
   case_record.assign_attributes(
@@ -97,7 +111,10 @@ end
 puts "Seed completada:"
 puts "- Usuarias: #{users.count}"
 puts "- Casos en borrador: #{Case.where(status: :draft).count}"
+puts "- Casos pendientes de revisión: #{Case.where(status: :pending_review).count}"
 puts "- Casos en revisión: #{Case.where(status: :in_review).count}"
+puts "- Casos con cambios solicitados: #{Case.where(status: :changes_requested).count}"
 puts "- Casos aprobados: #{Case.where(status: :approved).count}"
+puts "- Casos cerrados: #{Case.where(status: :closed).count}"
 puts "- Representantes: #{representatives.count}"
 puts "- Administradores: #{User.where(role: :admin).count}"
