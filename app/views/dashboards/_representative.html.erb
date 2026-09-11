@@ -71,12 +71,14 @@
         <% end %>
 
         <div class="dashboard__actions">
-          <button
-            type="button"
-            class="dashboard__button dashboard__button--secondary"
-            >
-            Ver caso
-          </button>
+          <%= link_to "Ver caso", case_path(case_record), class: "dashboard__button dashboard__button--secondary" %>
+
+          <% if policy(case_record).start_review? %>
+            <%= button_to "Comenzar revisión",
+                          start_review_case_path(case_record),
+                          method: :post,
+                          class: "dashboard__button" %>
+          <% end %>
 
           <% if policy(case_record).assign? %>
             <%= button_to "Asignarme",

@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :case_files, except: [:index]
     member do
       post :submit_for_review
+      post :decide
+      post :start_review
     end
 
   end

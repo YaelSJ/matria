@@ -1,4 +1,77 @@
 <div class="case-review">
+  <% if current_user.representative? || current_user.admin? %>
+    <div class="case-review__header">
+      <h1>Revisión del caso #<%= @case.id %></h1>
+      <span><%= @case.status.humanize %></span>
+    </div>
+
+    <section aria-labelledby="representative-summary-title">
+      <h2 id="representative-summary-title">Resumen del caso</h2>
+      <p><%= @case.summary.presence || "El resumen estará disponible cuando la usuaria envíe el caso a revisión." %></p>
+    </section>
+
+    <section aria-labelledby="representative-risk-title">
+      <h2 id="representative-risk-title">Nivel de riesgo</h2>
+      <span class="dashboard__status dashboard__status--risk-<%= @case.risk_level %>">
+        <%= @case.risk_level.humanize %>
+      </span>
+    </section>
+
+    <section aria-labelledby="representative-files-title">
+      <h2 id="representative-files-title">Archivos para verificar</h2>
+      <% if @case.case_files.any? %>
+        <ul>
+          <% @case.case_files.each do |case_file| %>
+            <li>
+              <%= case_file.title %>
+              (<%= case_file.file_type.humanize %>)
+              <% if case_file.audio.attached? %>
+                <%= link_to "Escuchar audio", rails_blob_path(case_file.audio, disposition: "inline") %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No hay archivos adjuntos.</p>
+      <% end %>
+    </section>
+
+    <section aria-labelledby="case-history-title">
+      <h2 id="case-history-title">Historial del expediente</h2>
+      <% if @case.case_events.any? %>
+        <ol>
+          <% @case.case_events.order(:created_at).each do |event| %>
+            <li>
+              <strong><%= event.event_type.humanize %></strong>
+              <%= event.created_at.strftime("%d/%m/%Y %H:%M") %>
+              <% if event.comment.present? %>
+                <p><%= event.comment %></p>
+              <% end %>
+            </li>
+          <% end %>
+        </ol>
+      <% else %>
+        <p>Aún no hay eventos registrados.</p>
+      <% end %>
+    </section>
+
+    <% if policy(@case).start_review? %>
+      <%= button_to "Comenzar revisión", start_review_case_path(@case), method: :post, class: "dashboard__button" %>
+    <% end %>
+
+    <% if policy(@case).decide? %>
+      <section aria-labelledby="case-decision-title">
+        <h2 id="case-decision-title">Definir estatus</h2>
+        <%= form_with url: decide_case_path(@case), method: :post do |form| %>
+          <%= form.label :decision, "Decisión" %>
+          <%= form.select :decision, [["Aprobar", "approved"], ["Solicitar cambios", "changes_requested"], ["Cerrar expediente", "closed"]] %>
+          <%= form.label :comment, "Comentario u observaciones" %>
+          <%= form.text_area :comment %>
+          <%= form.submit "Guardar decisión", class: "dashboard__button" %>
+        <% end %>
+      </section>
+    <% end %>
+  <% else %>
   <div class="case-review__header">
     <h1>Revisión de mi caso</h1>
     <span><%= @case.status.humanize %></span>
@@ -47,7 +120,7 @@
     <% if @case.case_files.any? %>
       <ul>
         <% @case.case_files.each do |case_file| %>
-          <li><%= case_file.title %> (<%= case_file.kind.humanize %>)</li>
+          <li><%= case_file.title %> (<%= case_file.file_type.humanize %>)</li>
         <% end %>
       </ul>
     <% else %>
@@ -64,5 +137,6 @@
     <% unless @case.ready_for_submission? %>
       <p>Para enviar necesitas completar la descripción, aceptar el consentimiento y contar con la transcripción del testimonio inicial.</p>
     <% end %>
+  <% end %>
   <% end %>
 </div>
