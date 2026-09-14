@@ -1,12 +1,4 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+
 password = "123456"
 
 create_user = lambda do |name, email, role, index|
@@ -93,17 +85,17 @@ users = 1.upto(10).map do |index|
   message.role = "user"
   message.save!
 
-  case_file = case_record.case_files.find_or_initialize_by(
-    title: "Documento de Usuaria #{index}"
-  )
-  case_file.assign_attributes(
-    file_type: "opening_testimony",
-    state: "Ciudad de México",
-    document_number: "DOC-#{format("%03d", index)}",
-    transcript: "Transcripción de prueba de Usuaria #{index}.",
-    ai_summary: "Resumen generado para el caso de Usuaria #{index}."
-  )
-  case_file.save!
+  # case_file = case_record.case_files.find_or_initialize_by(
+  #   title: "Documento de Usuaria #{index}"
+  # )
+  # case_file.assign_attributes(
+  #   file_type: "opening_testimony",
+  #   state: "Ciudad de México",
+  #   document_number: "DOC-#{format("%03d", index)}",
+  #   transcript: "Transcripción de prueba de Usuaria #{index}.",
+  #   ai_summary: "Resumen generado para el caso de Usuaria #{index}."
+  # )
+  # case_file.save!
 
   user
 end
