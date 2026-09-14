@@ -1,100 +1,83 @@
 <div class="dashboard">
-  <div class="dashboard__content">
-    <h1 class="dashboard__title">Mi dashboard</h1>
-
-    <% if current_user.representative? %>
-      <p class="dashboard__representative-state">
-        Estado de atención:
-        <strong><%= current_user.state.presence || "Sin estado asignado" %></strong>
-      </p>
-    <% end %>
+  <div class="dashboard__content <%= 'dashboard__content--representative' if current_user.representative? || current_user.admin? %>">
 
     <% if current_user.user? && @case %>
       <% status_labels = {
-        "draft" => "Borrador / Sin enviar",
-        "pending_review" => "Pendiente de revisión",
+        "draft" => "Borrador",
+        "pending_review" => "En revisión",
         "in_review" => "En revisión",
-        "changes_requested" => "Observaciones / Acción requerida",
+        "changes_requested" => "Acción requerida",
         "approved" => "Aprobado",
         "closed" => "Cerrado"
       } %>
 
-      <section class="dashboard__card" aria-labelledby="case-title">
-        <div class="dashboard__card-header">
-          <h2 id="case-title" class="dashboard__card-title">
-            Mi caso
-          </h2>
+      <section class="user-dashboard">
+        <header class="user-dashboard__header">
+          <h1>Mi dashboard</h1>
+        </header>
 
-          <span class="dashboard__status">
-            <%= status_labels.fetch(@case.status) %>
-          </span>
+        <section class="user-dashboard__case-card" aria-labelledby="user-case-title">
+          <div class="user-dashboard__case-header">
+            <h2 id="user-case-title">Mi caso</h2>
+
+            <span class="user-dashboard__status user-dashboard__status--<%= @case.status %>">
+              <%= status_labels.fetch(@case.status) %>
+            </span>
+          </div>
+
+          <p class="user-dashboard__label">Última actualización</p>
+
+          <p class="user-dashboard__date">
+            <%= @case.updated_at.strftime("%d/%m/%Y") %>
+          </p>
+
+          <%= link_to(
+            @case.editable_by_user? ? "Continuar con mi caso" : "Ver mi caso",
+            case_path(@case),
+            class: "user-dashboard__case-button"
+          ) %>
+        </section>
+
+        <div class="user-dashboard__shortcuts">
+          <button type="button" class="user-dashboard__shortcut">
+            <span class="user-dashboard__shortcut-icon" aria-hidden="true">
+              <i class="fa-regular fa-comment"></i>
+            </span>
+
+            <span class="user-dashboard__shortcut-copy">
+              <span class="user-dashboard__shortcut-title">Mis Chats</span>
+              <span class="user-dashboard__shortcut-description">
+                Lista de conversaciones
+              </span>
+            </span>
+
+            <i class="fa-solid fa-chevron-right user-dashboard__chevron" aria-hidden="true"></i>
+          </button>
+
+          <button type="button" class="user-dashboard__shortcut">
+            <span class="user-dashboard__shortcut-icon" aria-hidden="true">
+              <i class="fa-regular fa-file"></i>
+            </span>
+
+            <span class="user-dashboard__shortcut-copy">
+              <span class="user-dashboard__shortcut-title">Archivos de mi caso</span>
+              <span class="user-dashboard__shortcut-description">
+                Archivos relacionados con tu caso
+              </span>
+            </span>
+
+            <i class="fa-solid fa-chevron-right user-dashboard__chevron" aria-hidden="true"></i>
+          </button>
         </div>
 
-        <p class="dashboard__label">Última actualización</p>
+        <section class="user-dashboard__message">
+          <p>Estamos aquí para acompañarte</p>
 
-        <p class="dashboard__date">
-          <%= @case.updated_at.strftime("%d/%m/%Y") %>
-        </p>
-
-        <%= link_to(
-          @case.editable_by_user? ? "Continuar con mi caso pendiente" : "Ver mi caso",
-          case_path(@case),
-          class: "dashboard__button"
-        ) %>
+          <i class="fa-solid fa-seedling user-dashboard__message-icon" aria-hidden="true"></i>
+        </section>
       </section>
 
-      <div class="dashboard__shortcuts">
-        <button
-          type="button"
-          class="dashboard__shortcut"
-          >
-          <span class="dashboard__shortcut-icon" aria-hidden="true">
-            <i class="fa-regular fa-comment"></i>
-          </span>
-
-          <span class="dashboard__shortcut-copy">
-            <span class="dashboard__shortcut-title">Mis Chats</span>
-            <span class="dashboard__shortcut-description">
-              Lista de conversaciones
-            </span>
-          </span>
-
-          <i
-            class="fa-solid fa-chevron-right dashboard__chevron"
-            aria-hidden="true"></i>
-        </button>
-
-        <button
-          type="button"
-          class="dashboard__shortcut"
-          >
-          <span class="dashboard__shortcut-icon" aria-hidden="true">
-            <i class="fa-regular fa-file"></i>
-          </span>
-
-          <span class="dashboard__shortcut-copy">
-            <span class="dashboard__shortcut-title">
-              Archivos de mi caso
-            </span>
-            <span class="dashboard__shortcut-description">
-              Archivos relacionados con tu caso
-            </span>
-          </span>
-
-          <i
-            class="fa-solid fa-chevron-right dashboard__chevron"
-            aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <div class="dashboard__message">
-        <p>Estamos aquí para acompañarte</p>
-
-        <i
-          class="fa-solid fa-seedling dashboard__message-icon"
-          aria-hidden="true"></i>
-      </div>
-    <% elsif current_user.representative? %>
+    <% elsif current_user.representative? || current_user.admin? %>
       <%= render "representative" %>
     <% end %>
   </div>

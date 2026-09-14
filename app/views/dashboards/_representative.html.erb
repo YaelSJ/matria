@@ -1,39 +1,3 @@
-<button
-  type="button"
-  class="dashboard__shortcut"
-  >
-  <span class="dashboard__shortcut-icon" aria-hidden="true">
-    <i class="fa-solid fa-book-open"></i>
-  </span>
-
-  <span class="dashboard__shortcut-copy">
-    <span class="dashboard__shortcut-title">Recursos de apoyo</span>
-    <span class="dashboard__shortcut-description">
-      Guías de denuncia y canales de apoyo
-    </span>
-  </span>
-
-  <i
-    class="fa-solid fa-chevron-right dashboard__chevron"
-    aria-hidden="true"></i>
-</button>
-
-<nav class="dashboard__tabs" aria-label="Listas de casos">
-  <%= link_to "Mis casos asignados",
-              dashboard_path(tab: "assigned"),
-              class: "dashboard__tab",
-              aria: {
-                current: (@active_tab == "assigned" ? "page" : nil)
-              } %>
-
-  <%= link_to "Casos de mi estado",
-              dashboard_path(tab: "state"),
-              class: "dashboard__tab",
-              aria: {
-                current: (@active_tab == "state" ? "page" : nil)
-              } %>
-</nav>
-
 <% risk_labels = {
   "critical" => "Crítico",
   "high" => "Alto",
@@ -41,66 +5,258 @@
   "low" => "Bajo"
 } %>
 
-<% if @cases.any? %>
-  <p class="dashboard__label mb-3">
-    Ordenados por nivel de riesgo
-  </p>
+<% status_labels = {
+  "pending_review" => "Pendiente",
+  "in_review" => "En revisión",
+  "changes_requested" => "Con observaciones"
+} %>
 
-  <div class="dashboard__case-list">
-    <% @cases.each do |case_record| %>
-      <section class="dashboard__card">
-        <div class="dashboard__card-header">
-          <h2 class="dashboard__card-title">
-            Caso #<%= case_record.id %>
-          </h2>
+<% activity_icons = {
+  "submitted" => "fa-paper-plane",
+  "resubmitted" => "fa-rotate",
+  "assigned" => "fa-user-check",
+  "review_started" => "fa-magnifying-glass",
+  "approved" => "fa-circle-check",
+  "changes_requested" => "fa-comment-dots",
+  "closed" => "fa-lock"
+} %>
 
-          <span class="dashboard__status dashboard__status--risk-<%= case_record.risk_level %>">
-            Riesgo: <%= risk_labels.fetch(case_record.risk_level) %>
-          </span>
+<% case_query = {
+  case_scope: @case_scope,
+  risk: @selected_risk,
+  case_order: @case_order,
+  activity_scope: @activity_scope,
+  activity_order: @activity_order
+} %>
+
+<section class="representative-dashboard">
+  <header class="representative-dashboard__header">
+    <div>
+      <h1>Dashboard de gestión</h1>
+      <p class="representative-dashboard__eyebrow">Panel de atención</p>
+    </div>
+  </header>
+
+  <section class="representative-dashboard__metrics" aria-label="Métricas del estado">
+    <%= link_to dashboard_path(case_query.merge(case_scope: "unassigned")),
+                class: "representative-dashboard__metric representative-dashboard__metric--urgent" do %>
+      <p>Urgente</p>
+      <strong><%= @urgent_cases_count %></strong>
+      <span>Riesgo alto y crítico</span>
+    <% end %>
+
+    <%= link_to dashboard_path(case_query.merge(
+                  case_scope: "unassigned",
+                  case_order: "oldest"
+                )),
+                class: "representative-dashboard__metric" do %>
+      <p>Pendientes</p>
+      <strong><%= @pending_cases_count %></strong>
+      <span>Revisión y observaciones</span>
+    <% end %>
+
+    <%= link_to dashboard_path(case_query.merge(case_scope: "assigned")),
+                class: "representative-dashboard__metric representative-dashboard__metric--total" do %>
+      <p>Total de casos</p>
+
+      <span class="representative-dashboard__metric-state">
+        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+        <%= current_user.state.presence || "Mi estado" %>
+      </span>
+
+      <strong><%= @approved_cases_count %></strong>
+      <span>Casos aprobados</span>
+
+      <i class="fa-solid fa-chart-line representative-dashboard__metric-chart" aria-hidden="true"></i>
+    <% end %>
+  </section>
+
+  <div class="representative-dashboard__layout">
+    <section class="representative-dashboard__activity" aria-labelledby="activity-title">
+      <div class="representative-dashboard__section-header">
+        <h2 id="activity-title">Actividad reciente</h2>
+
+        <div class="representative-dashboard__controls">
+          <%= link_to "Asignados",
+                      dashboard_path(case_query.merge(activity_scope: "assigned")),
+                      class: ("is-active" if @activity_scope == "assigned") %>
+
+          <%= link_to "Sin asignar",
+                      dashboard_path(case_query.merge(activity_scope: "unassigned")),
+                      class: ("is-active" if @activity_scope == "unassigned") %>
+        </div>
+      </div>
+
+      <div class="representative-dashboard__sort">
+        <span>Orden:</span>
+
+        <%= link_to "Más reciente",
+                    dashboard_path(case_query.merge(activity_order: "newest")),
+                    class: ("is-active" if @activity_order == "newest") %>
+
+        <%= link_to "Más antiguo",
+                    dashboard_path(case_query.merge(activity_order: "oldest")),
+                    class: ("is-active" if @activity_order == "oldest") %>
+      </div>
+
+      <% if @recent_activity.any? %>
+        <ol class="representative-dashboard__activity-list">
+          <% @recent_activity.each do |event| %>
+            <li class="representative-dashboard__activity-item">
+              <div class="representative-dashboard__activity-copy">
+                <span class="representative-dashboard__activity-icon">
+                  <i
+                    class="fa-solid <%= activity_icons.fetch(event.event_type, "fa-circle-info") %>"
+                    aria-hidden="true">
+                  </i>
+                </span>
+
+                <div>
+                  <%= link_to case_path(event.case),
+                              class: "representative-dashboard__activity-link" do %>
+                    <strong>
+                      <%= [event.case.user.name, event.case.user.last_name]
+                          .compact
+                          .join(" ")
+                          .presence || "Caso ##{event.case_id}" %>
+                    </strong>
+                  <% end %>
+
+                  <span>Caso #<%= event.case_id %></span>
+                  <p><%= event.event_type.humanize %></p>
+
+                  <time datetime="<%= event.created_at.iso8601 %>">
+                    <%= event.created_at.strftime("%d/%m/%Y · %H:%M") %>
+                  </time>
+                </div>
+              </div>
+
+              <%= button_to "Ocultar",
+                            dismiss_dashboard_activity_path(event),
+                            method: :delete,
+                            class: "representative-dashboard__dismiss" %>
+            </li>
+          <% end %>
+        </ol>
+      <% else %>
+        <p class="representative-dashboard__empty">
+          No hay actividad para este filtro.
+        </p>
+      <% end %>
+    </section>
+
+    <section class="representative-dashboard__cases" aria-labelledby="cases-title">
+      <div class="representative-dashboard__section-header">
+        <div>
+          <h2 id="cases-title">Mis casos</h2>
+          <p>Casos activos</p>
         </div>
 
-        <% if @active_tab == "state" %>
-          <p class="dashboard__assignment">
-            Representante:
-            <% if case_record.representative %>
-              <%= case_record.representative.name.presence || "Asignada" %>
-            <% else %>
-              Sin asignar
-            <% end %>
-          </p>
+        <div class="representative-dashboard__controls">
+          <%= link_to "Asignados",
+                      dashboard_path(case_query.merge(case_scope: "assigned")),
+                      class: ("is-active" if @case_scope == "assigned") %>
+
+          <%= link_to "Sin asignar",
+                      dashboard_path(case_query.merge(case_scope: "unassigned")),
+                      class: ("is-active" if @case_scope == "unassigned") %>
+        </div>
+      </div>
+
+      <div class="representative-dashboard__case-filters">
+        <%= form_with url: dashboard_path, method: :get, local: true do |form| %>
+          <%= form.hidden_field :case_scope, value: @case_scope %>
+          <%= form.hidden_field :case_order, value: @case_order %>
+          <%= form.hidden_field :activity_scope, value: @activity_scope %>
+          <%= form.hidden_field :activity_order, value: @activity_order %>
+
+          <%= form.label :risk, "Riesgo" %>
+
+          <%= form.select :risk,
+                          [["Todos", ""]] +
+                          risk_labels.map { |value, label| [label, value] },
+                          { selected: @selected_risk } %>
+
+          <%= form.submit "Filtrar", class: "representative-dashboard__filter-button" %>
         <% end %>
 
-        <div class="dashboard__actions">
-          <%= link_to "Ver caso", case_path(case_record), class: "dashboard__button dashboard__button--secondary" %>
+        <div class="representative-dashboard__sort">
+          <%= link_to "Más antiguo",
+                      dashboard_path(case_query.merge(case_order: "oldest")),
+                      class: ("is-active" if @case_order == "oldest") %>
 
-          <% if policy(case_record).start_review? %>
-            <%= button_to "Comenzar revisión",
-                          start_review_case_path(case_record),
-                          method: :post,
-                          class: "dashboard__button" %>
-          <% end %>
-
-          <% if policy(case_record).assign? %>
-            <%= button_to "Asignarme",
-                          assign_case_path(case_record),
-                          method: :patch,
-                          class: "dashboard__button",
-                          form: { class: "dashboard__assignment-form" } %>
-          <% end %>
+          <%= link_to "Más reciente",
+                      dashboard_path(case_query.merge(case_order: "newest")),
+                      class: ("is-active" if @case_order == "newest") %>
         </div>
-      </section>
-    <% end %>
-  </div>
-<% else %>
-  <div class="dashboard__empty">
-    <% if @active_tab == "assigned" %>
-      <p>Aún no tienes casos asignados</p>
+      </div>
 
-      <%= link_to "Casos de mi estado",
-                  dashboard_path(tab: "state"),
-                  class: "dashboard__button" %>
-    <% else %>
-      <p>No hay casos disponibles para mostrar en tu estado.</p>
-    <% end %>
+      <% if @cases.any? %>
+        <div class="representative-dashboard__table-wrapper">
+          <table class="representative-dashboard__table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>ID</th>
+
+                <% if @case_scope == "assigned" %>
+                  <th>Nombre</th>
+                  <th>Riesgo</th>
+                <% else %>
+                  <th>Riesgo</th>
+                  <th>Estatus</th>
+                <% end %>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @cases.each_with_index do |case_record, index| %>
+                <tr>
+                  <td><%= index + 1 %></td>
+
+                  <td>
+                    <%= link_to "##{case_record.id}",
+                                case_path(case_record),
+                                class: "representative-dashboard__table-id" %>
+                  </td>
+
+                  <% if @case_scope == "assigned" %>
+                    <td>
+                      <%= [case_record.user.name, case_record.user.last_name]
+                          .compact
+                          .join(" ")
+                          .presence || "Sin nombre" %>
+                    </td>
+
+                    <td>
+                      <span class="representative-dashboard__risk representative-dashboard__risk--<%= case_record.risk_level %>">
+                        <%= risk_labels.fetch(case_record.risk_level) %>
+                      </span>
+                    </td>
+                  <% else %>
+                    <td>
+                      <span class="representative-dashboard__risk representative-dashboard__risk--<%= case_record.risk_level %>">
+                        <%= risk_labels.fetch(case_record.risk_level) %>
+                      </span>
+                    </td>
+
+                    <td>
+                      <%= status_labels.fetch(
+                        case_record.status,
+                        case_record.status.humanize
+                      ) %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="representative-dashboard__empty">
+          No hay casos para este filtro.
+        </p>
+      <% end %>
+    </section>
   </div>
-<% end %>
+</section>

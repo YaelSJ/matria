@@ -1,13 +1,246 @@
-.navbar-lewagon {
-  justify-content: space-between;
-  background: white;
-  background-color: #90549d;
+.matria-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  width: 100%;
+  background-color: $matria-cream;
+  border-bottom: 1px solid rgba($matria-lavender, .65);
+  box-shadow: 0 4px 16px rgba($matria-purple, .08);
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 72px;
+    padding: 12px 24px;
+  }
+
+  &__brand,
+  &__brand img {
+    display: block;
+  }
+
+  &__brand img {
+    width: 118px;
+    height: auto;
+  }
+
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: $matria-purple;
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+    font-size: 1.45rem;
+    cursor: pointer;
+
+    &:hover {
+      background: $matria-lavender-light;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $matria-orchid;
+      outline-offset: 3px;
+    }
+  }
 }
 
-.navbar-lewagon .navbar-collapse {
-  flex-grow: 0;
+.matria-menu {
+  &.offcanvas {
+    --bs-offcanvas-width: 76vw;
+    --bs-offcanvas-bg: #fff8f5;
+
+    display: flex;
+    flex-direction: column;
+    width: 76vw;
+    max-width: 300px;
+    color: $matria-charcoal;
+    background-color: $matria-cream;
+    border-right: 1px solid rgba($matria-lavender, .65);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 84px;
+    padding: 18px 20px;
+    background-color: $matria-cream;
+    border-bottom: 1px solid rgba($matria-lavender, .5);
+  }
+
+  &__brand,
+  &__brand img {
+    display: block;
+  }
+
+  &__brand img {
+    width: 132px;
+    height: auto;
+  }
+
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    color: $matria-purple;
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+    font-size: 1.35rem;
+    cursor: pointer;
+
+    &:hover {
+      background: $matria-lavender-light;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $matria-orchid;
+      outline-offset: 3px;
+    }
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    padding: 24px 16px;
+    overflow-y: auto;
+    background-color: $matria-cream;
+  }
+
+  &__label {
+    margin: 0 10px 10px;
+    color: rgba($matria-purple, .72);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 52px;
+    padding: 12px 14px;
+    color: $matria-purple;
+    border-radius: 14px;
+    font-weight: 700;
+    text-decoration: none;
+
+    > i,
+    .matria-menu__avatar {
+      display: inline-flex;
+      flex: 0 0 28px;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      color: $matria-purple;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    &:hover,
+    &.is-active {
+      color: $matria-purple;
+      background: linear-gradient(
+        90deg,
+        rgba($matria-orange, .22),
+        rgba($matria-lavender-light, .45)
+      );
+    }
+
+    &:focus-visible {
+      outline: 3px solid $matria-orchid;
+      outline-offset: 2px;
+    }
+
+    &--logout {
+      color: #a02d48;
+
+      > i {
+        color: #a02d48;
+      }
+
+      &:hover {
+        background: rgba(#e87b91, .16);
+      }
+    }
+  }
+
+  &__avatar {
+    width: 28px;
+    height: 28px;
+    color: $matria-cream !important;
+    background: $matria-orchid;
+    border-radius: 50%;
+    font-size: .85rem !important;
+  }
+
+  &__divider {
+    height: 1px;
+    margin: 24px 10px;
+    background: rgba($matria-lavender, .7);
+  }
+
+  &__guest {
+    display: grid;
+    gap: 18px;
+    padding: 12px;
+
+    p {
+      margin: 0;
+      color: $matria-purple;
+      font-weight: 700;
+    }
+  }
+
+  &__login {
+    display: block;
+    padding: 13px 18px;
+    color: white;
+    background: linear-gradient(110deg, #551070, $matria-orchid, #ee5a83);
+    border-radius: 999px;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  &__footer {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 20px 28px;
+    background-color: $matria-cream;
+    border-top: 1px solid rgba($matria-lavender, .5);
+  }
+
+  &__footer-logo {
+    display: block;
+    width: 86px;
+    height: 86px;
+    object-fit: contain;
+  }
 }
 
-.navbar-lewagon .navbar-brand img {
-  width: 40px;
+@media (min-width: 768px) {
+  .matria-navbar__bar {
+    padding-right: 48px;
+    padding-left: 48px;
+  }
 }

@@ -1,43 +1,120 @@
-<nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container-fluid">
-    <%= link_to root_path, class: "navbar-brand" do %>
-      <%= image_tag "logo.matria.png" %>
+<nav class="matria-navbar" aria-label="Navegación principal">
+  <div class="matria-navbar__bar">
+    <%= link_to root_path, class: "matria-navbar__brand", aria: { label: "Ir al inicio" } do %>
+      <%= image_tag "logo.matria.png", alt: "Matr.IA" %>
     <% end %>
 
-    <!-- Botón hamburguesa configurado para Offcanvas -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button
+      class="matria-navbar__toggle"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#matriaMenu"
+      aria-controls="matriaMenu"
+      aria-label="Abrir menú">
+
+      <i class="fa-solid fa-bars" aria-hidden="true"></i>
     </button>
+  </div>
 
-    <!-- Panel lateral que se desliza desde la izquierda (offcanvas-start) -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
+  <div
+    class="offcanvas offcanvas-start matria-menu"
+    tabindex="-1"
+    id="matriaMenu"
+    aria-labelledby="matriaMenuTitle">
 
-      <div class="offcanvas-body">
-        <ul class="navbar-nav me-auto">
-          <% if user_signed_in? %>
-            <li class="nav-item active">
-              <%= link_to "Mi dashboard", dashboard_path, class: "nav-link" %>
+    <div class="matria-menu__header">
+      <%= link_to root_path, class: "matria-menu__brand", aria: { label: "Ir al inicio" } do %>
+        <%= image_tag "logo.matria.png", alt: "Matr.IA" %>
+      <% end %>
+
+      <button
+        type="button"
+        class="matria-menu__close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Cerrar menú">
+
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="matria-menu__body">
+      <% if user_signed_in? %>
+        <p class="matria-menu__label">Menú principal</p>
+
+        <ul class="matria-menu__list">
+          <li>
+            <%= link_to dashboard_path,
+                        class: "matria-menu__link #{'is-active' if current_page?(dashboard_path)}" do %>
+              <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+              <span>Dashboard</span>
+            <% end %>
+          </li>
+
+          <% if current_user.representative? || current_user.admin? %>
+            <li>
+              <%= link_to dashboard_path(tab: "assigned"),
+                          class: "matria-menu__link #{'is-active' if params[:tab] == 'assigned'}" do %>
+                <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+                <span>Mis casos asignados</span>
+              <% end %>
             </li>
-            <li class="nav-item dropdown">
-              <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <%= image_tag "avatar.avif", class: "avatar", alt: "dropdown menu" %>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <%= link_to "Mi perfil", "#", class: "dropdown-item" %>
-                <%= link_to "Cerrar sesión", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
-              </div>
+
+            <li>
+              <%= link_to dashboard_path(tab: "state"),
+                          class: "matria-menu__link #{'is-active' if params[:tab] == 'state'}" do %>
+                <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+                <span>Casos de mi estado</span>
+              <% end %>
             </li>
-          <% else %>
-            <li class="nav-item mb-2">
-              <%= link_to "Iniciar sesión", new_user_session_path, class: "btn-orange" %>
+          <% elsif current_user.case.present? %>
+            <li>
+              <%= link_to case_path(current_user.case), class: "matria-menu__link" do %>
+                <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+                <span>Mi caso</span>
+              <% end %>
             </li>
           <% end %>
         </ul>
-      </div>
+
+        <div class="matria-menu__divider"></div>
+
+        <p class="matria-menu__label">Cuenta</p>
+
+        <ul class="matria-menu__list">
+          <li>
+            <%= link_to "#", class: "matria-menu__link" do %>
+              <span class="matria-menu__avatar" aria-hidden="true">
+                <i class="fa-solid fa-user"></i>
+              </span>
+              <span>Mi perfil</span>
+            <% end %>
+          </li>
+
+          <li>
+            <%= link_to destroy_user_session_path,
+                        data: { turbo_method: :delete },
+                        class: "matria-menu__link matria-menu__link--logout" do %>
+              <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+              <span>Cerrar sesión</span>
+            <% end %>
+          </li>
+        </ul>
+      <% else %>
+        <div class="matria-menu__guest">
+          <p>Bienvenida a MatrIA</p>
+
+          <%= link_to "Iniciar sesión",
+                      new_user_session_path,
+                      class: "matria-menu__login" %>
+        </div>
+      <% end %>
     </div>
+
+    <div class="matria-menu__footer">
+      <%= image_tag "logo-FNCVV.png",
+                    class: "matria-menu__footer-logo",
+                    alt: "Frente Nacional Contra Violencia Vicaria" %>
+    </div>
+
   </div>
 </nav>

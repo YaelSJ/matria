@@ -23,9 +23,25 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= render "shared/navbar" %>
+  <body class="app-shell">
     <%= render "shared/flashes" %>
-    <%= yield %>
+    <%= render "shared/navbar" %>
+
+    <main class="app-shell__content">
+      <%= yield %>
+    </main>
+
+  <footer class="app-footer">
+    <%= link_to "https://www.fncvv.com/",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                class: "app-footer__link",
+                aria: { label: "Visitar el sitio del Frente Nacional Contra Violencia Vicaria" } do %>
+
+      <%= image_tag "logo-FNCVV.png",
+                    class: "app-footer__logo",
+                    alt: "Frente Nacional Contra Violencia Vicaria" %>
+    <% end %>
+  </footer>
   </body>
 </html>
