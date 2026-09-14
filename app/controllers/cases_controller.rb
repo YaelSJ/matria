@@ -1,5 +1,5 @@
 class CasesController < ApplicationController
-  before_action :set_case, only: %i[show edit update submit_for_review decide start_review]
+  before_action :set_case, only: %i[show edit update review_transcription confirm_transcription submit_for_review decide start_review]
 
   def show
     authorize @case
@@ -7,6 +7,10 @@ class CasesController < ApplicationController
 
   def edit
     authorize @case
+  end
+
+  def review_transcription
+    authorize @case, :edit?
   end
 
   def update
@@ -67,6 +71,40 @@ class CasesController < ApplicationController
     redirect_to case_path(@case), notice: "La revisión del caso comenzó."
   rescue ActiveRecord::RecordInvalid => e
     redirect_to case_path(@case), alert: e.message
+  end
+
+  def confirm_transcription
+    @transcript = params[:transcript].to_s
+    @consent = params[:consent] == "1"
+
+    @case.with_lock do
+      authorize @case, :update?
+
+      testimony = @case.opening_testimony
+
+      if testimony.nil?
+        @case.errors.add(:base, "La transcripción todavía no está disponible.")
+      elsif @transcript.strip.blank?
+        @case.errors.add(:base, "La transcripción no puede quedar vacía.")
+      elsif @case.content.blank?
+        @case.errors.add(:base, "Falta completar la descripción del caso.")
+      end
+
+      if @case.errors.any?
+        raise ActiveRecord::RecordInvalid.new(@case)
+      end
+
+      testimony.update!(transcript: @transcript)
+      @case.update!(consent: @consent, summary: nil)
+      @case.submit_for_review!(actor: current_user)
+    end
+
+    redirect_to dashboard_path,
+                notice: "Tu caso fue enviado para revisión.",
+                status: :see_other
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:alert] = e.record.errors.full_messages.to_sentence
+    render :review_transcription, status: :unprocessable_entity
   end
 
   private
