@@ -93,17 +93,17 @@ users = 1.upto(10).map do |index|
   message.role = "user"
   message.save!
 
-  case_file = case_record.case_files.find_or_initialize_by(
-    title: "Documento de Usuaria #{index}"
-  )
-  case_file.assign_attributes(
-    file_type: "opening_testimony",
-    state: "Ciudad de México",
-    document_number: "DOC-#{format("%03d", index)}",
-    transcript: "Transcripción de prueba de Usuaria #{index}.",
-    ai_summary: "Resumen generado para el caso de Usuaria #{index}."
-  )
-  case_file.save!
+  # case_file = case_record.case_files.find_or_initialize_by(
+  #   title: "Documento de Usuaria #{index}"
+  # )
+  # case_file.assign_attributes(
+  #   file_type: "opening_testimony",
+  #   state: "Ciudad de México",
+  #   document_number: "DOC-#{format("%03d", index)}",
+  #   transcript: "Transcripción de prueba de Usuaria #{index}.",
+  #   ai_summary: "Resumen generado para el caso de Usuaria #{index}."
+  # )
+  # case_file.save!
 
   user
 end
