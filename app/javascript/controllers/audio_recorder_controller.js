@@ -42,8 +42,8 @@ export default class extends Controller {
 
   stop () {
     if (this.recorder && this.recorder.state !== "inactive") {
-      this.recorder.stop()
       this.startButtonTarget.disabled = false
+      this.recorder.stop()
       this.stopButtonTarget.disabled = true
       }
     }

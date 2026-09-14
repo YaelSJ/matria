@@ -78,3 +78,4 @@ gem "json", "~> 2.0"
 
 gem "cloudinary"
 
+gem "whispercpp"
