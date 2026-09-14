@@ -23,12 +23,12 @@ class Case < ApplicationRecord
   ].freeze
 
   validates :status, presence: true
-  validates :consent, acceptance: { accept: true, message: "debe ser otorgado para registrar el caso" }
+  validates :consent, inclusion: { in: [true, false] }
   validates :risk_level,
             inclusion: { in: %w[low medium high critical] }
 
   def ready_for_submission?
-    consent? && content.present? && opening_testimony&.transcript.present?
+    content.present? && opening_testimony&.transcript.present?
   end
 
   def submit_for_review!(actor: user)
@@ -41,7 +41,7 @@ class Case < ApplicationRecord
     update!(status: :pending_review)
     case_events.create!(user: actor, event_type: previous_status == "changes_requested" ? "resubmitted" : "submitted",
                         from_status: previous_status, to_status: status)
-    CaseSummaryGenerator.new(self).call
+    CaseSummaryJob.perform_later(id)
   end
 
   def assign_to!(representative)

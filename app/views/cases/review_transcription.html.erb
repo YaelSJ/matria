@@ -1,0 +1,49 @@
+<div class="case-review">
+  <h1>Revisa tu transcripción</h1>
+
+  <p>
+    Lee tu testimonio y corrige lo que necesites.
+    Al confirmar, enviaremos tu caso a revisión
+    a las representantes de tu estado.
+  </p>
+
+  <% if @case.opening_testimony&.transcript.present? %>
+    <%= form_with url: confirm_transcription_case_path(@case),
+                  method: :post do %>
+
+      <%= label_tag :transcript, "Tu transcripción",
+                    class: "d-block mb-2" %>
+
+      <%= text_area_tag :transcript,
+                        @transcript.nil? ? @case.opening_testimony.transcript : @transcript,
+                        rows: 12,
+                        required: true,
+                        class: "form-control mb-4" %>
+
+      <p id="consent-explanation">
+        Las representantes podrán ver tu nombre, teléfono
+        y un resumen de tu caso generado por IA.
+        Puedes autorizar también el acceso a tu testimonio
+        completo y a los archivos de tu caso.
+      </p>
+
+      <div class="form-check mb-4">
+        <%= hidden_field_tag :consent, "0" %>
+
+        <%= check_box_tag :consent, "1", @consent == true,
+                          class: "form-check-input",
+                          aria: { describedby: "consent-explanation" } %>
+
+        <%= label_tag :consent,
+                      "Autorizo a las representantes de mi estado a consultar mi testimonio completo y los archivos de mi caso.",
+                      class: "form-check-label" %>
+      </div>
+
+      <%= submit_tag "Confirmar y continuar",
+                     class: "dashboard__button",
+                     data: { turbo_submits_with: "Enviando…" } %>
+    <% end %>
+  <% else %>
+    <p>Tu transcripción todavía no está disponible.</p>
+  <% end %>
+</div>
