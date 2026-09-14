@@ -1,0 +1,46 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-shell__content {
+  flex: 1 0 auto;
+}
+
+.app-footer {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px 36px;
+  background-color: $matria-background;
+}
+
+.app-footer__logo {
+  display: block;
+  width: 105px;
+  height: auto;
+  object-fit: contain;
+}
+
+  .app-footer__link {
+    display: inline-block;
+    border-radius: 50%;
+
+    &:focus-visible {
+      outline: 3px solid $matria-purple;
+      outline-offset: 4px;
+    }
+  }
+  
+@media (max-width: 600px) {
+  .app-footer {
+    padding-top: 24px;
+    padding-bottom: 30px;
+  }
+
+  .app-footer__logo {
+    width: 86px;
+  }
+}
