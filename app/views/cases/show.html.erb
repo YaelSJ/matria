@@ -80,6 +80,7 @@
       </aside>
 
       <main class="case-review__column">
+        <% if policy(@case).view_full_testimony? %>
         <section class="case-review__card" aria-labelledby="representative-files-title">
           <h2 id="representative-files-title">
             <span class="case-review__icon">
@@ -118,6 +119,10 @@
           <% end %>
         </section>
 
+        <% else %>
+          <p>La usuaria no ha autorizado el acceso a los archivos de su caso.</p>
+        <% end %>
+
         <section class="case-review__card" aria-labelledby="applicant-title">
           <h2 id="applicant-title">Datos de la solicitante</h2>
 
@@ -154,19 +159,23 @@
           </dl>
         </section>
 
-        <section class="case-review__card" aria-labelledby="transcript-title">
-          <h2 id="transcript-title">
-            <span class="case-review__icon">
-              <i class="fa-regular fa-message" aria-hidden="true"></i>
-            </span>
-            Transcripción
-          </h2>
+        <% if policy(@case).view_full_testimony? %>
+          <section class="case-review__card" aria-labelledby="transcript-title">
+            <h2 id="transcript-title">
+              <span class="case-review__icon">
+                <i class="fa-regular fa-message" aria-hidden="true"></i>
+              </span>
+              Transcripción
+            </h2>
 
-          <p>
-            <%= @case.opening_testimony&.transcript.presence ||
-                "Aún no hay una transcripción del testimonio inicial." %>
-          </p>
-        </section>
+            <p>
+              <%= @case.opening_testimony&.transcript.presence ||
+                  "Aún no hay una transcripción del testimonio inicial." %>
+            </p>
+          </section>
+        <% else %>
+          <p>La usuaria no ha autorizado el acceso a su testimonio completo.</p>
+        <% end %>
       </main>
 
       <aside class="case-review__column">

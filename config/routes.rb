@@ -15,13 +15,14 @@ Rails.application.routes.draw do
   resources :cases do
     resources :case_files, except: [:index]
     member do
+      get :review_transcription
+      post :confirm_transcription
       post :submit_for_review
       post :decide
       post :start_review
     end
 
   end
-
 
   get "dashboard", to: "dashboards#show", as: :dashboard
   patch "cases/:id/assign", to: "cases#assign", as: :assign_case

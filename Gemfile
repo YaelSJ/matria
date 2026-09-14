@@ -79,3 +79,6 @@ gem "json", "~> 2.0"
 gem "cloudinary"
 
 gem "whispercpp"
+gem "openai"
+gem "ruby_llm", "~> 1.16.0"
+

@@ -31,6 +31,13 @@ class CasePolicy < ApplicationPolicy
     user&.admin? || (user&.representative? && show? && record.representative_id.nil? && record.pending_review?)
   end
 
+  def view_full_testimony?
+    return false unless user
+    return true if user.user? && record.user_id == user.id
+
+    show? && record.consent?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       return scope.none unless user
