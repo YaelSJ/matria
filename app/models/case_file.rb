@@ -2,6 +2,8 @@ class CaseFile < ApplicationRecord
   belongs_to :case
   has_one_attached :audio
 
+  validates :audio, presence: true
+
   enum :file_type, {
     opening_testimony: "opening_testimony",
     additional_audio: "additional_audio",
@@ -9,6 +11,4 @@ class CaseFile < ApplicationRecord
     image: "image",
     document: "document"
   }, default: :document
-
-  validates :title, :state, presence: true
 end
