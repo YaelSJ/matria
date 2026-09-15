@@ -103,6 +103,6 @@ class Case < ApplicationRecord
   end
 
   def opening_testimony
-    case_files.opening_testimony.first || case_files.where.not(transcript: [nil, ""]).order(:created_at, :id).first
+    case_files.opening_testimony.first
   end
 end

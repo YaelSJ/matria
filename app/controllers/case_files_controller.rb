@@ -12,8 +12,11 @@ class CaseFilesController < ApplicationController
     @case_file.file_type = :opening_testimony
 
     if @case_file.save
-      WhisperTranscriber.new(@case_file.audio.url).call
-      redirect_to dashboard_path
+      AudioToWavConverter.new(@case_file.audio.url).call do |audio_wav|
+        audio_transcript = WhisperTranscriber.new(audio_wav).call
+        @case_file.update!(transcript: audio_transcript)
+      end
+      redirect_to review_transcription_case_path(@case)
     else
       render :new, status: :unprocessable_entity
     end

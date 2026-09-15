@@ -11,13 +11,13 @@ class WhisperTranscriber
     params = Whisper::Params.new(
       language: "es",
       print_timestamps: false
-      )
+    )
 
-      transcript = ""
+    transcript = ""
 
-      whisper.transcribe(@audio_path, params) do |text|
-        transcript << text
-      end
+    whisper.transcribe(@audio_path, params) do |text|
+      transcript << text
+    end
 
     transcript.dup.force_encoding(Encoding::UTF_8).scrub("").squish
   end
