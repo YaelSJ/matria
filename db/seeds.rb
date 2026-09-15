@@ -21,6 +21,7 @@ def demo_user(name:, email:, role:, index:)
     user.save!
   end
 end
+  puts "hola"
 
 def demo_case(user:, status:, risk_level:, consent:, representative: nil)
   Case.find_or_initialize_by(user: user).tap do |case_record|
