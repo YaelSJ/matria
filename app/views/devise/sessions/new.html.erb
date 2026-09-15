@@ -1,61 +1,52 @@
-<main class="authentication">
+<section class="authentication authentication--login">
   <div class="authentication__container">
-    <section
-      class="authentication__card"
-      aria-labelledby="sign-in-title"
-    >
+    <figure class="authentication__welcome" data-controller="welcome-video">
+      <div class="authentication__video-crop">
+      <video class="authentication__video" data-welcome-video-target="video"
+             playsinline preload="auto" disablepictureinpicture disableremoteplayback
+             aria-label="Animación de bienvenida a MatrIA">
+        <source src="/videos/matria-saludo.mp4" type="video/mp4">
+        Tu navegador no puede reproducir esta animación.
+      </video>
+      </div>
+      <figcaption>Te damos la bienvenida a MatrIA</figcaption>
+    </figure>
+    <section class="authentication__card" aria-labelledby="sign-in-title">
       <header class="authentication__header">
-        <h1 id="sign-in-title" class="authentication__title">
-          Inicia tu sesión
-        </h1>
-
-        <p class="authentication__description">
-          Ingresa para continuar con tu proceso en MatrIA.
-        </p>
+        <h1 id="sign-in-title" class="authentication__title">Inicia tu sesión</h1>
+        <p class="authentication__description">Ingresa para continuar con tu proceso en MatrIA.</p>
       </header>
-
-      <%= simple_form_for(
-        resource,
-        as: resource_name,
-        url: session_path(resource_name)
-      ) do |f| %>
+      <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
         <div class="authentication__section">
-          <%= f.input(
-            :email,
-            label: "Correo electrónico",
-            required: true,
-            autofocus: true,
-            input_html: { autocomplete: "email" }
-          ) %>
-
-          <%= f.input(
-            :password,
-            label: "Contraseña",
-            required: true,
-            input_html: { autocomplete: "current-password" }
-          ) %>
-
+          <div class="authentication__input-group">
+            <%= f.input :email, label: "Correo electrónico", required: true,
+                        placeholder: "ejemplo@correo.com",
+                        input_html: { autocomplete: "email" } %>
+            <i class="fa-regular fa-envelope authentication__input-icon" aria-hidden="true"></i>
+          </div>
+          <div class="authentication__input-group" data-controller="password-visibility">
+            <%= f.input :password, label: "Contraseña", required: true,
+                        placeholder: "••••••••",
+                        input_html: { autocomplete: "current-password",
+                                      data: { password_visibility_target: "input" } } %>
+            <i class="fa-solid fa-lock authentication__input-icon" aria-hidden="true"></i>
+            <button type="button" class="authentication__password-toggle"
+                    data-action="password-visibility#toggle"
+                    data-password-visibility-target="button"
+                    aria-label="Mostrar contraseña" aria-pressed="false"
+                    aria-controls="<%= resource_name %>_password" hidden>
+              <i class="fa-regular fa-eye-slash" data-password-visibility-target="icon" aria-hidden="true"></i>
+            </button>
+          </div>
           <% if devise_mapping.rememberable? %>
-            <%= f.input(
-              :remember_me,
-              label: "Recordarme",
-              as: :boolean
-            ) %>
+            <%= f.input :remember_me, label: "Recordarme", as: :boolean %>
           <% end %>
         </div>
-
         <div class="authentication__actions">
-          <%= f.button(
-            :submit,
-            "Iniciar sesión",
-            class: "authentication__submit"
-          ) %>
+          <%= f.button :submit, "Iniciar sesión", class: "authentication__submit" %>
         </div>
       <% end %>
-
-      <div class="authentication__links">
-        <%= render "devise/shared/links" %>
-      </div>
+      <div class="authentication__links"><%= render "devise/shared/links" %></div>
     </section>
   </div>
-</main>
+</section>

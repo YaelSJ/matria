@@ -150,3 +150,135 @@
     }
   }
 }
+
+// Login layout and reference-inspired form; other authentication pages keep their layout.
+.authentication--login {
+  display: flex;
+  align-items: center;
+  padding: 48px 24px;
+  background: #ffffff;
+
+  .authentication__container {
+    max-width: 1040px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
+    align-items: center;
+    gap: 56px;
+  }
+
+  .authentication__welcome {
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+
+    figcaption {
+      margin-top: 16px;
+      color: $matria-purple;
+      font-family: $headers-font;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+  }
+
+  .authentication__video-crop {
+    width: 100%;
+    max-width: 340px;
+    height: 500px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .authentication__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .authentication__card {
+    padding: 32px 28px 24px;
+    border: 1px solid rgba($matria-purple, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba($matria-purple, 0.12);
+  }
+
+  .authentication__title { font-size: 1.85rem; }
+  .authentication__description { font-size: 0.85rem; line-height: 1.6; }
+  .authentication__section { margin-bottom: 0; }
+  .form-label { font-size: 0.85rem; }
+
+  .authentication__input-group {
+    position: relative;
+
+    .form-control {
+      padding-left: 40px;
+      padding-right: 46px;
+      border-color: #d2cdd2;
+      border-radius: 10px;
+    }
+  }
+
+  .authentication__input-icon {
+    position: absolute;
+    top: 47px;
+    left: 14px;
+    color: #969298;
+    pointer-events: none;
+  }
+
+  .authentication__password-toggle {
+    position: absolute;
+    top: 30px;
+    right: 2px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #79747d;
+
+    &:hover { color: $matria-purple; }
+    &:focus-visible { outline: 2px solid $matria-purple; outline-offset: -3px; }
+  }
+
+  .form-check { font-size: 0.85rem; }
+  .form-check-input:checked { background-color: #eea163; border-color: #eea163; }
+  .form-check-input:focus { box-shadow: 0 0 0 3px rgba($matria-orange, 0.2); }
+
+  .authentication__submit {
+    background-color: #ffb171;
+    color: $matria-purple;
+    box-shadow: 0 2px 4px rgba($matria-charcoal, 0.2);
+
+    &:hover { background-color: #ffa45b; }
+    &:focus-visible { outline: 3px solid $matria-purple; outline-offset: 3px; }
+  }
+
+  .authentication__links {
+    padding-top: 12px;
+    border-top: 1px solid rgba($matria-purple, 0.14);
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .authentication--login {
+    padding: 24px 16px;
+
+    .authentication__container {
+      max-width: 460px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .authentication__video-crop { max-width: 230px; height: 340px; }
+    .authentication__welcome figcaption { font-size: 1rem; margin-top: 10px; }
+    .authentication__card { padding: 28px 22px 20px; }
+  }
+}
