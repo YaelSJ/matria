@@ -15,6 +15,14 @@
       "ai_chat" => "fa-comments"
     } %>
 
+    <% file_type_labels = {
+      "image" => "Imagen",
+      "document" => "Documento",
+      "opening_testimony" => "Testimonio inicial",
+      "additional_audio" => "Audio adicional",
+      "ai_chat" => "Chat de IA"
+    } %>
+
     <header class="case-review__header">
       <div>
         <p class="case-review__eyebrow">Expediente en atención</p>
@@ -102,7 +110,12 @@
 
                   <div>
                     <strong><%= case_file.title %></strong>
-                    <small><%= case_file.file_type.humanize %></small>
+                    <small>
+                      <%= file_type_labels.fetch(
+                        case_file.file_type,
+                        case_file.file_type.humanize
+                      ) %>
+                    </small>
 
                     <% if case_file.audio.attached? %>
                       <audio controls preload="metadata">
@@ -192,6 +205,13 @@
                 "Aún no se ha agregado una descripción del caso." %>
           </p>
         </section>
+
+        <% if policy(@case).assign? %>
+          <%= button_to "Asignarme este caso",
+                        assign_case_path(@case),
+                        method: :patch,
+                        class: "case-review__button" %>
+        <% end %>
 
         <% if policy(@case).start_review? %>
           <%= button_to "Comenzar revisión",
@@ -284,14 +304,15 @@
     </section>
 
     <% if @case.editable_by_user? %>
-      <%= button_to "Confirmar y enviar a revisión",
-                    submit_for_review_case_path(@case),
-                    method: :post,
-                    class: "dashboard__button",
-                    disabled: !@case.ready_for_submission? %>
-
-      <% unless @case.ready_for_submission? %>
-        <p>Para enviar necesitas completar la descripción, aceptar el consentimiento y contar con la transcripción del testimonio inicial.</p>
+      <% if @case.content.present? && @case.opening_testimony&.transcript.present? %>
+        <%= link_to "Revisar transcripción y enviar",
+                    review_transcription_case_path(@case),
+                    class: "dashboard__button" %>
+      <% else %>
+        <p>
+          Para continuar necesitas completar la descripción del caso
+          y contar con la transcripción del testimonio inicial.
+        </p>
       <% end %>
     <% end %>
   <% end %>

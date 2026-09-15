@@ -21,16 +21,16 @@
                         class: "form-control mb-4" %>
 
       <p id="consent-explanation">
-        Las representantes podrán ver tu nombre, teléfono
-        y un resumen de tu caso generado por IA.
-        Puedes autorizar también el acceso a tu testimonio
-        completo y a los archivos de tu caso.
+        Las representantes podrán ver tu nombre, teléfono, un resumen
+        generado por IA, tu testimonio completo y los archivos de tu caso.
+        Debes aceptar este consentimiento para enviar el caso a revisión.
       </p>
 
       <div class="form-check mb-4">
         <%= hidden_field_tag :consent, "0" %>
 
         <%= check_box_tag :consent, "1", @consent == true,
+                          required: true,
                           class: "form-check-input",
                           aria: { describedby: "consent-explanation" } %>
 

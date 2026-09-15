@@ -12,8 +12,9 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  resources :cases do
-    resources :case_files, except: [:index]
+  resources :cases, only: [:show, :edit, :update] do
+    resources :case_files, only: [:new, :create]
+
     member do
       get :review_transcription
       post :confirm_transcription
@@ -21,7 +22,6 @@ Rails.application.routes.draw do
       post :decide
       post :start_review
     end
-
   end
 
   get "dashboard", to: "dashboards#show", as: :dashboard
