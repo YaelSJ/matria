@@ -1,0 +1,18 @@
+<dialog class="registration-success"
+        data-controller="registration-success"
+        data-turbo-temporary
+        aria-labelledby="registration-success-title"
+        aria-describedby="registration-success-description">
+  <%= image_tag "ok_matria.png", class: "registration-success__image", alt: "", width: 180, height: 180 %>
+
+  <h2 id="registration-success-title" class="registration-success__title">
+    ¡Tu registro fue exitoso!
+  </h2>
+  <p id="registration-success-description" class="registration-success__description">
+    Bienvenida a MatrIA. Tu cuenta está lista para comenzar tu proceso.
+  </p>
+
+  <form method="dialog">
+    <button type="submit" class="registration-success__continue" autofocus>Continuar</button>
+  </form>
+</dialog>
