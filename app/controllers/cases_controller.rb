@@ -88,6 +88,8 @@ class CasesController < ApplicationController
         @case.errors.add(:base, "La transcripción no puede quedar vacía.")
       elsif @case.content.blank?
         @case.errors.add(:base, "Falta completar la descripción del caso.")
+      elsif !@consent
+        @case.errors.add(:consent, "debe aceptarse para enviar el caso a revisión")
       end
 
       if @case.errors.any?
@@ -114,7 +116,7 @@ class CasesController < ApplicationController
   end
 
   def case_params
-    params.require(:case).permit(:content, :consent, :opening_testimony_transcript)
+    params.require(:case).permit(:content)
   end
 
   def update_user_details
@@ -124,9 +126,13 @@ class CasesController < ApplicationController
     )
     current_user.update!(details) if details.present?
 
-    transcript = case_params[:opening_testimony_transcript]
+    transcript = transcript_params[:opening_testimony_transcript]
     return if transcript.nil? || @case.opening_testimony.nil?
 
     @case.opening_testimony.update!(transcript: transcript)
+  end
+
+  def transcript_params
+    params.require(:case).permit(:opening_testimony_transcript)
   end
 end

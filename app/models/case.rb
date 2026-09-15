@@ -28,7 +28,7 @@ class Case < ApplicationRecord
             inclusion: { in: %w[low medium high critical] }
 
   def ready_for_submission?
-    content.present? && opening_testimony&.transcript.present?
+    content.present? && consent? && opening_testimony&.transcript.present?
   end
 
   def submit_for_review!(actor: user)

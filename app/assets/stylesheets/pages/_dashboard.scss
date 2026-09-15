@@ -446,6 +446,21 @@
     background: $matria-cream;
     border-radius: 50%;
     font-size: .75rem;
+    line-height: 1;
+
+    i {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+    }
+
+    i::before {
+      display: block;
+      line-height: 1;
+    }
   }
 
   &__activity-link {
