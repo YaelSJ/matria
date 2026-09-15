@@ -4,3 +4,109 @@
   right: 16px;
   z-index: 1000;
 }
+
+.registration-success {
+  position: fixed;
+  inset: 0;
+  width: calc(100% - 32px);
+  max-width: 520px;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 40px;
+  overflow-y: auto;
+  border: 1px solid rgba(white, 0.8);
+  border-radius: 32px;
+  background: linear-gradient(145deg, #fff8f5, #fff5f3);
+  color: $matria-charcoal;
+  text-align: center;
+  box-shadow:
+    0 24px 64px rgba($matria-purple, 0.18),
+    0 8px 18px rgba($matria-charcoal, 0.1);
+
+  &::backdrop {
+    background-color: rgba($matria-lavender-light, 0.65);
+    backdrop-filter: blur(5px);
+  }
+
+  &__image {
+    display: block;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 24px;
+    object-fit: contain;
+  }
+
+  &__title {
+    margin: 0 0 16px;
+    color: $matria-purple;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__description {
+    max-width: 360px;
+    margin: 0 auto 32px;
+    color: mix($matria-purple, $matria-charcoal, 45%);
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  &__continue {
+    width: 100%;
+    min-height: 54px;
+    padding: 14px 24px;
+    border: 2px solid mix($matria-orange, $matria-lavender, 65%);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ffb779, #ffad70);
+    color: #321d32;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow:
+      0 5px 7px rgba($matria-charcoal, 0.2),
+      inset 0 1px 0 rgba(white, 0.35);
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      background: #ffa564;
+      box-shadow: 0 6px 10px rgba($matria-charcoal, 0.24);
+    }
+
+    &:active {
+      box-shadow: 0 2px 4px rgba($matria-charcoal, 0.18);
+    }
+
+    &:focus-visible {
+      outline: 3px solid $matria-purple;
+      outline-offset: 4px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .registration-success {
+    padding: 28px 24px;
+    border-radius: 26px;
+
+    &__image {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 20px;
+    }
+
+    &__title {
+      font-size: 1.7rem;
+    }
+
+    &__description {
+      font-size: 1rem;
+      margin-bottom: 28px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .registration-success__continue {
+    transition: none;
+  }
+}
