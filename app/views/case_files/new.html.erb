@@ -1,35 +1,39 @@
-<h1>Subir un archivo prueba</h1>
+<% content_for :hide_footer, true %>
 
-<%= simple_form_for [@case, @case_file],
-      html:{
-        class: "audio-recorder",
-        data: { controller: "audio-recorder" }
-      } do |f| %>
-  <div>
-    <%= f.input :audio, as: :file, input_html: { data: { audio_recorder_target: "audioInput"}} %>
-    <%= f.input :title %>
-  </div>
+<div class="audio-recorder" data-controller="audio-recorder">
+  <h1>Graba tu testimonio</h1>
+  <p>
+    Mantén presionado el micrófono y cuenta lo que pasó.
+    Suelta cuando termines. Podrás escucharlo antes de enviarlo.
+  </p>
 
-  <div>
-    <button
-      type="button"
-      data-audio-recorder-target="startButton"
-      data-action="click->audio-recorder#start">
-      Start
+  <%= simple_form_for [@case, @case_file] do |f| %>
+    <%= f.input :audio, as: :file, label: false, required: false,
+                input_html: { class: "d-none", data: { audio_recorder_target: "audioInput" } } %>
+
+    <button type="button"
+            class="audio-recorder__mic"
+            aria-label="Mantén presionado para grabar"
+            data-action="pointerdown->audio-recorder#start
+                         pointerup->audio-recorder#stop
+                         pointerleave->audio-recorder#stop
+                         pointercancel->audio-recorder#stop">
+      <i class="fa-solid fa-microphone"></i>
     </button>
 
-    <button
-      type="button"
-      disabled
-      data-audio-recorder-target="stopButton"
-      data-action="click->audio-recorder#stop">
-      Stop
-    </button>
-  </div>
+    <p class="audio-recorder__timer" data-audio-recorder-target="timer">0:00</p>
 
-  <div>
-    <%= f.submit "Enviar" %>
-  </div>
-<% end %>
-<%# touch-start %>
-<%# touch-end %>
+    <p class="audio-recorder__hint">
+      <span class="audio-recorder__hint--idle">Mantén presionado para grabar</span>
+      <span class="audio-recorder__hint--recording">Suelta para terminar</span>
+    </p>
+
+    <audio controls controlslist="nodownload noplaybackrate"
+           class="audio-recorder__preview d-none" data-audio-recorder-target="preview"></audio>
+
+    <%= f.button :submit, "Enviar testimonio",
+                 class: "audio-recorder__submit",
+                 disabled: true,
+                 data: { audio_recorder_target: "submit", turbo_submits_with: "Transcribiendo tu audio..." } %>
+  <% end %>
+</div>

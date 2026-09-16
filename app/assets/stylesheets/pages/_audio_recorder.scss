@@ -1,0 +1,117 @@
+.audio-recorder {
+  min-height: calc(100vh - 72px);
+  padding: 24px 24px 40px;
+  background: $matria-background;
+  color: $matria-charcoal;
+  text-align: center;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: 800;
+  }
+
+  p {
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  &__mic {
+    display: grid;
+    place-items: center;
+    width: 112px;
+    height: 112px;
+    margin: 24px auto 12px;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 2.6rem;
+    background: linear-gradient(135deg, $matria-purple, $matria-orchid);
+    box-shadow: 0 12px 30px rgba($matria-purple, .35);
+    transition: transform .15s;
+    touch-action: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  &__timer {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $matria-purple;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__hint {
+    color: $matria-mauve;
+    font-size: .95rem;
+  }
+
+  &__preview {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: 54px;
+    margin: 20px auto 0;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba($matria-purple, .18);
+
+    &::-webkit-media-controls-panel {
+      background: linear-gradient(135deg, $matria-lavender-light, #fff);
+    }
+
+    &::-webkit-media-controls-current-time-display,
+    &::-webkit-media-controls-time-remaining-display {
+      color: $matria-purple;
+      font-weight: 700;
+    }
+
+    &::-webkit-media-controls-mute-button {
+      border-radius: 50%;
+      background-color: rgba($matria-purple, .12);
+    }
+
+    &::-webkit-media-controls-play-button {
+      border-radius: 50%;
+      background-color: #B0CFA0;
+      filter: invert(1);
+    }
+  }
+
+  &__submit {
+    margin-top: 24px;
+    padding: 12px 32px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 700;
+    background: $matria-purple;
+
+    &:disabled {
+      color: #fff;
+      background: $matria-purple;
+      opacity: .45;
+    }
+  }
+
+  &__hint--recording,
+  &.recording &__hint--idle {
+    display: none;
+  }
+
+  &.recording &__hint--recording {
+    display: inline;
+  }
+
+  &.recording &__mic {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, $matria-orange-deep, $matria-orange);
+    animation: audio-recorder-pulse 1.2s infinite;
+  }
+}
+
+@keyframes audio-recorder-pulse {
+  from { box-shadow: 0 0 0 0 rgba($matria-orange, .5); }
+  to   { box-shadow: 0 0 0 28px rgba($matria-orange, 0); }
+}
