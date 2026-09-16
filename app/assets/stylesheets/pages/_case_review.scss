@@ -257,6 +257,7 @@
     font-size: 1.05rem;
     font-weight: 800;
     text-align: center;
+    text-decoration: none;
     transition: transform .15s ease, box-shadow .15s ease;
 
     &:hover {
@@ -269,6 +270,163 @@
       outline: 3px solid $matria-purple;
       outline-offset: 3px;
     }
+  }
+
+  &__button--secondary {
+    color: $matria-purple;
+    background: transparent;
+    border: 1px solid rgba($matria-purple, .45);
+    box-shadow: none;
+
+    &:hover {
+      color: $matria-purple;
+      background: $matria-lavender-light;
+      box-shadow: none;
+    }
+  }
+
+  &__user-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  &__user-content,
+  &__user-sidebar {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+  }
+
+  &__user-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    background: rgba($matria-lavender-light, .55);
+    border: 1px solid $matria-lavender;
+    border-radius: 20px;
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    &--changes {
+      background: rgba($matria-orange, .12);
+      border-color: rgba($matria-orange, .45);
+
+      .case-review__icon {
+        color: darken($matria-orange, 25%);
+        background: rgba($matria-orange, .22);
+      }
+    }
+  }
+
+  &__representative-note {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: rgba(white, .65);
+    border-left: 4px solid $matria-purple;
+    border-radius: 0 10px 10px 0;
+
+    strong {
+      display: block;
+      margin-bottom: 4px;
+      color: $matria-purple;
+    }
+  }
+
+  &__user-actions {
+    display: grid;
+    gap: 12px;
+
+    h2 {
+      margin-bottom: 6px;
+    }
+  }
+
+  &__edit-header {
+    max-width: 1000px;
+    align-items: flex-start;
+
+    > div > p:last-child {
+      max-width: 620px;
+      margin-top: 10px;
+      color: rgba($matria-charcoal, .75);
+    }
+  }
+
+  &__edit-form {
+    display: grid;
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__edit-fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    legend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin: 0 0 20px;
+      color: $matria-black;
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+  }
+
+  &__edit-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  &__edit-field {
+    display: grid;
+    gap: 7px;
+
+    label {
+      color: $matria-charcoal;
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      color: $matria-charcoal;
+      background: white;
+      border: 1px solid rgba($matria-purple, .45);
+      border-radius: 10px;
+      font: inherit;
+      line-height: 1.4;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: 3px solid rgba($matria-orchid, .25);
+      border-color: $matria-purple;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+  }
+
+  &__edit-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   &__form {
@@ -320,6 +478,19 @@
   .case-review__card {
     padding: 32px;
   }
+
+  .case-review__edit-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .case-review__edit-field--full {
+    grid-column: 1 / -1;
+  }
+
+  .case-review__edit-actions {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, .45fr);
+    justify-content: end;
+  }
 }
 
 @media (min-width: 900px) {
@@ -335,6 +506,14 @@
 
   .case-review__column:last-child > .case-review__button {
     align-self: center;
+  }
+
+  .case-review__user-layout {
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+  }
+
+  .case-review__user-notice {
+    grid-column: 1 / -1;
   }
 }
 

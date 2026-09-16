@@ -1,44 +1,90 @@
 <div class="case-review">
-  <h1>Editar mi caso</h1>
+  <header class="case-review__header case-review__edit-header">
+    <div>
+      <p class="case-review__eyebrow">Tu expediente</p>
+      <h1>Editar mi caso</h1>
+      <p>Actualiza tus datos o corrige la transcripción antes de volver a enviarla.</p>
+    </div>
+  </header>
 
-  <%= form_with model: @case do |form| %>
-    <fieldset>
-      <legend>Datos personales</legend>
-      <%= fields_for :user, current_user do |user_form| %>
-        <%= user_form.label :name, "Nombre" %>
-        <%= user_form.text_field :name %>
-        <%= user_form.label :last_name, "Apellidos" %>
-        <%= user_form.text_field :last_name %>
-        <%= user_form.label :state, "Estado" %>
-        <%= user_form.text_field :state %>
-        <%= user_form.label :city, "Ciudad" %>
-        <%= user_form.text_field :city %>
-        <%= user_form.label :phone_number, "Teléfono" %>
-        <%= user_form.telephone_field :phone_number %>
-        <%= user_form.label :user_country, "País" %>
-        <%= user_form.text_field :user_country %>
-        <%= user_form.label :birth_date, "Fecha de nacimiento" %>
-        <%= user_form.date_field :birth_date %>
-        <%= user_form.label :gender, "Género" %>
-        <%= user_form.text_field :gender %>
-        <%= user_form.label :sex, "Sexo" %>
-        <%= user_form.text_field :sex %>
-      <% end %>
-    </fieldset>
+  <%= form_with model: @case, class: "case-review__edit-form" do |form| %>
+    <section class="case-review__card">
+      <fieldset class="case-review__edit-fieldset">
+        <legend>
+          <span class="case-review__icon">
+            <i class="fa-solid fa-user" aria-hidden="true"></i>
+          </span>
+          Datos personales
+        </legend>
 
-    <fieldset>
-      <legend>Testimonio inicial</legend>
-      <% if @case.opening_testimony %>
-        <%= label_tag "case_opening_testimony_transcript", "Transcripción" %>
-        <%= text_area_tag "case[opening_testimony_transcript]",
-                          @case.opening_testimony.transcript,
-                          rows: 10 %>
-      <% else %>
-        <p>Regresa a la sección de grabación para crear tu testimonio inicial.</p>
-      <% end %>
-    </fieldset>
+        <div class="case-review__edit-fields">
+          <%= fields_for :user, current_user do |user_form| %>
+            <div class="case-review__edit-field">
+              <%= user_form.label :name, "Nombre" %>
+              <%= user_form.text_field :name, autocomplete: "given-name" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :last_name, "Apellidos" %>
+              <%= user_form.text_field :last_name, autocomplete: "family-name" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :state, "Estado" %>
+              <%= user_form.text_field :state, autocomplete: "address-level1" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :city, "Ciudad" %>
+              <%= user_form.text_field :city, autocomplete: "address-level2" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :phone_number, "Teléfono" %>
+              <%= user_form.telephone_field :phone_number, autocomplete: "tel" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :user_country, "País" %>
+              <%= user_form.text_field :user_country, autocomplete: "country-name" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :birth_date, "Fecha de nacimiento" %>
+              <%= user_form.date_field :birth_date, autocomplete: "bday" %>
+            </div>
+            <div class="case-review__edit-field">
+              <%= user_form.label :gender, "Género" %>
+              <%= user_form.text_field :gender %>
+            </div>
+            <div class="case-review__edit-field case-review__edit-field--full">
+              <%= user_form.label :sex, "Sexo" %>
+              <%= user_form.text_field :sex %>
+            </div>
+          <% end %>
+        </div>
+      </fieldset>
+    </section>
 
-    <%= form.submit "Guardar cambios", class: "dashboard__button" %>
-    <%= link_to "Cancelar", case_path(@case), class: "dashboard__button dashboard__button--secondary" %>
+    <section class="case-review__card">
+      <fieldset class="case-review__edit-fieldset">
+        <legend>
+          <span class="case-review__icon">
+            <i class="fa-regular fa-message" aria-hidden="true"></i>
+          </span>
+          Testimonio inicial
+        </legend>
+
+        <% if @case.opening_testimony %>
+          <div class="case-review__edit-field">
+            <%= label_tag "case_opening_testimony_transcript", "Transcripción" %>
+            <%= text_area_tag "case[opening_testimony_transcript]",
+                              @case.opening_testimony.transcript,
+                              rows: 10 %>
+          </div>
+        <% else %>
+          <p class="case-review__empty">Aún no has grabado un testimonio. Regresa a tu caso para iniciar una grabación.</p>
+        <% end %>
+      </fieldset>
+    </section>
+
+    <div class="case-review__edit-actions">
+      <%= form.submit "Guardar cambios", class: "case-review__button" %>
+      <%= link_to "Cancelar", case_path(@case), class: "case-review__button case-review__button--secondary" %>
+    </div>
   <% end %>
 </div>
