@@ -31,6 +31,7 @@
       <%= yield %>
     </main>
 
+  <% unless content_for?(:hide_footer) %>
   <footer class="app-footer">
     <%= link_to "https://www.fncvv.com/",
                 target: "_blank",
@@ -43,5 +44,6 @@
                     alt: "Frente Nacional Contra Violencia Vicaria" %>
     <% end %>
   </footer>
+  <% end %>
   </body>
 </html>
