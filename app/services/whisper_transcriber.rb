@@ -6,7 +6,12 @@ class WhisperTranscriber
   end
 
   def call
-    whisper = Whisper::Context.new("base")
+    context_params = Whisper::Context::Params.new(
+      use_gpu: false,
+      flash_attn: false
+    )
+
+    whisper = Whisper::Context.new("base", context_params)
 
     params = Whisper::Params.new(
       language: "es",

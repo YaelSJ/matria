@@ -7,43 +7,15 @@
     a las representantes de tu estado.
   </p>
 
-  <% if @case.opening_testimony&.transcript.present? %>
-    <%= form_with url: confirm_transcription_case_path(@case),
-                  method: :post do %>
+  <% opening_testimony = @case.opening_testimony %>
 
-      <%= label_tag :transcript, "Tu transcripción",
-                    class: "d-block mb-2" %>
-
-      <%= text_area_tag :transcript,
-                        @transcript.nil? ? @case.opening_testimony.transcript : @transcript,
-                        rows: 12,
-                        required: true,
-                        class: "form-control mb-4" %>
-
-      <p id="consent-explanation">
-        Las representantes podrán ver tu nombre, teléfono, un resumen
-        generado por IA, tu testimonio completo y los archivos de tu caso.
-        Debes aceptar este consentimiento para enviar el caso a revisión.
-      </p>
-
-      <div class="form-check mb-4">
-        <%= hidden_field_tag :consent, "0" %>
-
-        <%= check_box_tag :consent, "1", @consent == true,
-                          required: true,
-                          class: "form-check-input",
-                          aria: { describedby: "consent-explanation" } %>
-
-        <%= label_tag :consent,
-                      "Autorizo a las representantes de mi estado a consultar mi testimonio completo y los archivos de mi caso.",
-                      class: "form-check-label" %>
-      </div>
-
-      <%= submit_tag "Confirmar y continuar",
-                     class: "dashboard__button",
-                     data: { turbo_submits_with: "Enviando…" } %>
-    <% end %>
-  <% else %>
-    <p>Tu transcripción todavía no está disponible.</p>
+  <% if opening_testimony %>
+    <%= turbo_stream_from opening_testimony %>
   <% end %>
+
+  <%= render "transcription_review",
+            case_record: @case,
+            case_file: opening_testimony,
+            transcript: @transcript,
+            consent: @consent %>
 </div>
