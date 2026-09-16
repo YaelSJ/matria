@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "transcription_review" do %>
   <% if case_file&.transcript.present? %>
     <%= form_with url: confirm_transcription_case_path(case_record),
-                  method: :post do %>
+                  method: :post, data: { turbo_frame: "_top" } do %>
 
       <%= label_tag :transcript, "Tu transcripción",
                     class: "d-block mb-2" %>
