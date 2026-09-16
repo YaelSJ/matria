@@ -86,8 +86,6 @@ class CasesController < ApplicationController
         @case.errors.add(:base, "La transcripción todavía no está disponible.")
       elsif @transcript.strip.blank?
         @case.errors.add(:base, "La transcripción no puede quedar vacía.")
-      elsif @case.content.blank?
-        @case.errors.add(:base, "Falta completar la descripción del caso.")
       elsif !@consent
         @case.errors.add(:consent, "debe aceptarse para enviar el caso a revisión")
       end

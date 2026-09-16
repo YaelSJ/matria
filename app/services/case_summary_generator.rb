@@ -32,9 +32,6 @@ class CaseSummaryGenerator
     end
 
     input = [
-      "Descripción del caso:",
-      @case_record.content.presence || "No proporcionada.",
-      "",
       "Testimonio revisado por la usuaria:",
       transcript
     ].join("\n")

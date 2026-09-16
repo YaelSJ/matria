@@ -29,8 +29,8 @@ def demo_case(user:, status:, risk_level:, consent:, representative: nil)
       status: status,
       consent: consent,
       risk_level: risk_level,
-      content: "Caso ficticio de #{user.name}. Información creada únicamente para la demostración.",
-      summary: "Resumen ficticio para la demostración del caso de #{user.name}."
+      content: nil,
+      summary: nil
     )
     case_record.save!
   end
@@ -81,7 +81,9 @@ end
 demo_user(name: "Admin 1", email: "admin1@matria.com", role: :admin, index: 20)
 
 scenarios = [
+  # user1: caso en borrador sin audio ni transcripción, listo para grabar.
   { status: :draft, risk_level: :low, consent: false, transcript: nil },
+  # user2: transcripción disponible para revisar, editar y dar consentimiento.
   { status: :draft, risk_level: :medium, consent: false,
     transcript: "Este es un testimonio ficticio para revisar antes de otorgar el consentimiento." },
   { status: :pending_review, risk_level: :critical, consent: true,
@@ -166,4 +168,5 @@ puts "Seeds de Demo Day completados:"
 puts "- Usuarias: #{users.count}"
 puts "- Representantes: #{representatives.count}"
 puts "- Administradoras: #{User.where(role: :admin).count}"
+puts "- Grabación de testimonio: user1@matria.com / #{DEMO_PASSWORD}"
 puts "- Revisión de transcripción: user2@matria.com / #{DEMO_PASSWORD}"

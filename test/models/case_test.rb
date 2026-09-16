@@ -11,10 +11,11 @@ class CaseTest < ActiveSupport::TestCase
     end
   end
 
-  test "submits a complete case for review" do
+  test "submits a case with consent and an opening testimony for review" do
     case_record = build_case
     create_opening_testimony(case_record)
 
+    assert_nil case_record.content
     case_record.submit_for_review!(actor: case_record.user)
 
     assert case_record.reload.pending_review?
@@ -72,7 +73,6 @@ class CaseTest < ActiveSupport::TestCase
 
     user.case.tap do |case_record|
       case_record.update!(
-        content: "Descripción del caso",
         consent: true,
         risk_level: :low
       )

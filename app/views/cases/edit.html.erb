@@ -27,12 +27,6 @@
     </fieldset>
 
     <fieldset>
-      <legend>Descripción del caso</legend>
-      <%= form.label :content, "Describe tu caso" %>
-      <%= form.text_area :content, rows: 8 %>
-    </fieldset>
-
-    <fieldset>
       <legend>Testimonio inicial</legend>
       <% if @case.opening_testimony %>
         <%= label_tag "case_opening_testimony_transcript", "Transcripción" %>
