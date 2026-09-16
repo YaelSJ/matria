@@ -48,6 +48,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_14_190040) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["case_event_id"], name: "index_activity_dismissals_on_case_event_id"
+    t.index ["user_id", "case_event_id"], name: "index_activity_dismissals_on_user_id_and_case_event_id", unique: true
     t.index ["user_id"], name: "index_activity_dismissals_on_user_id"
   end
 
