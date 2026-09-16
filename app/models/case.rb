@@ -28,7 +28,7 @@ class Case < ApplicationRecord
             inclusion: { in: %w[low medium high critical] }
 
   def ready_for_submission?
-    content.present? && consent? && opening_testimony&.transcript.present?
+    consent? && opening_testimony&.transcript.present?
   end
 
   def submit_for_review!(actor: user)
@@ -100,6 +100,13 @@ class Case < ApplicationRecord
 
   def editable_by_user?
     draft? || changes_requested?
+  end
+
+  def latest_changes_request
+    case_events
+      .where(event_type: "changes_requested")
+      .order(created_at: :desc)
+      .first
   end
 
   def opening_testimony

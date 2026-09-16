@@ -192,20 +192,6 @@
       </main>
 
       <aside class="case-review__column">
-        <section class="case-review__card" aria-labelledby="description-title">
-          <h2 id="description-title">
-            <span class="case-review__icon">
-              <i class="fa-solid fa-align-left" aria-hidden="true"></i>
-            </span>
-            Descripción y testimonio
-          </h2>
-
-          <p>
-            <%= @case.content.presence ||
-                "Aún no se ha agregado una descripción del caso." %>
-          </p>
-        </section>
-
         <% if policy(@case).assign? %>
           <%= button_to "Asignarme este caso",
                         assign_case_path(@case),
@@ -247,73 +233,175 @@
     </div>
 
   <% else %>
-    <div class="case-review__header">
-      <h1>Revisión de mi caso</h1>
-      <span><%= @case.status.humanize %></span>
-    </div>
+    <% status_labels = {
+      "draft" => "Borrador",
+      "pending_review" => "Enviado a revisión",
+      "in_review" => "En revisión",
+      "changes_requested" => "Acción requerida",
+      "approved" => "Aprobado",
+      "closed" => "Cerrado"
+    } %>
 
-    <% if @case.changes_requested? %>
-      <p>La representante solicitó información adicional. Puedes actualizar tu caso y enviarlo nuevamente.</p>
-    <% elsif @case.in_review? %>
-      <p>Tu caso fue enviado y está en revisión. La información principal está bloqueada.</p>
-    <% elsif @case.editable_by_user? %>
-      <p>Revisa la información antes de enviarla a una representante.</p>
-    <% end %>
+    <% file_type_labels = {
+      "opening_testimony" => "Testimonio inicial",
+      "additional_audio" => "Audio adicional",
+      "ai_chat" => "Chat de IA",
+      "image" => "Imagen",
+      "document" => "Documento"
+    } %>
 
-    <% if @case.editable_by_user? %>
-      <%= link_to "Editar información", edit_case_path(@case), class: "dashboard__button" %>
-    <% end %>
+    <header class="case-review__header">
+      <div>
+        <p class="case-review__eyebrow">Tu expediente</p>
+        <h1>Revisión de mi caso</h1>
+      </div>
 
-    <section aria-labelledby="case-details-title">
-      <h2 id="case-details-title">Datos personales</h2>
-      <dl>
-        <dt>Nombre</dt>
-        <dd><%= [@case.user.name, @case.user.last_name].compact.join(" ") %></dd>
-        <dt>Estado y ciudad</dt>
-        <dd><%= [@case.user.state, @case.user.city].compact.join(", ") %></dd>
-        <dt>Teléfono</dt>
-        <dd><%= @case.user.phone_number.presence || "No capturado" %></dd>
-      </dl>
-    </section>
+      <span class="case-review__status">
+        <%= status_labels.fetch(@case.status, @case.status.humanize) %>
+      </span>
+    </header>
 
-    <section aria-labelledby="case-content-title">
-      <h2 id="case-content-title">Descripción del caso</h2>
-      <p><%= @case.content.presence || "Aún no has agregado una descripción." %></p>
-    </section>
+    <div class="case-review__user-layout">
+      <% if @case.changes_requested? %>
+        <section class="case-review__user-notice case-review__user-notice--changes"
+                 aria-labelledby="changes-request-title">
+          <span class="case-review__icon">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+          </span>
 
-    <section aria-labelledby="testimony-title">
-      <h2 id="testimony-title">Testimonio inicial</h2>
-      <% if @case.opening_testimony&.transcript.present? %>
-        <p><%= @case.opening_testimony.transcript %></p>
-      <% else %>
-        <p>Aún no hay una transcripción del testimonio inicial.</p>
+          <div>
+            <h2 id="changes-request-title">Tu expediente necesita una actualización</h2>
+            <p>Una representante solicitó información adicional. Revisa sus observaciones, actualiza lo necesario y vuelve a enviar tu caso.</p>
+
+            <% if (changes_request = @case.latest_changes_request)&.comment.present? %>
+              <div class="case-review__representative-note">
+                <strong>Observaciones de la representante</strong>
+                <p><%= changes_request.comment %></p>
+              </div>
+            <% end %>
+          </div>
+        </section>
+      <% elsif @case.pending_review? %>
+        <section class="case-review__user-notice" aria-labelledby="pending-review-title">
+          <span class="case-review__icon">
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+          </span>
+          <div>
+            <h2 id="pending-review-title">Tu caso fue enviado</h2>
+            <p>Una representante de tu estado lo revisará pronto. Te avisaremos si necesita información adicional.</p>
+          </div>
+        </section>
+      <% elsif @case.in_review? %>
+        <section class="case-review__user-notice" aria-labelledby="in-review-title">
+          <span class="case-review__icon">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          </span>
+          <div>
+            <h2 id="in-review-title">Tu caso está en revisión</h2>
+            <p>La información principal está bloqueada mientras una representante revisa tu expediente.</p>
+          </div>
+        </section>
+      <% elsif @case.editable_by_user? %>
+        <section class="case-review__user-notice" aria-labelledby="draft-case-title">
+          <span class="case-review__icon">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+          </span>
+          <div>
+            <h2 id="draft-case-title">Tu caso aún no ha sido enviado</h2>
+            <p>Revisa tu información y tu testimonio antes de compartirlo con una representante.</p>
+          </div>
+        </section>
       <% end %>
-    </section>
 
-    <section aria-labelledby="files-title">
-      <h2 id="files-title">Archivos del caso</h2>
-      <% if @case.case_files.any? %>
-        <ul>
-          <% @case.case_files.each do |case_file| %>
-            <li><%= case_file.title %> (<%= case_file.file_type.humanize %>)</li>
+      <main class="case-review__user-content">
+        <section class="case-review__card" aria-labelledby="testimony-title">
+          <h2 id="testimony-title">
+            <span class="case-review__icon">
+              <i class="fa-regular fa-message" aria-hidden="true"></i>
+            </span>
+            Testimonio inicial
+          </h2>
+
+          <% if @case.opening_testimony&.transcript.present? %>
+            <p><%= @case.opening_testimony.transcript %></p>
+          <% else %>
+            <p class="case-review__empty">Aún no has grabado tu testimonio inicial.</p>
           <% end %>
-        </ul>
-      <% else %>
-        <p>Aún no hay archivos agregados.</p>
-      <% end %>
-    </section>
+        </section>
 
-    <% if @case.editable_by_user? %>
-      <% if @case.content.present? && @case.opening_testimony&.transcript.present? %>
-        <%= link_to "Revisar transcripción y enviar",
-                    review_transcription_case_path(@case),
-                    class: "dashboard__button" %>
-      <% else %>
-        <p>
-          Para continuar necesitas completar la descripción del caso
-          y contar con la transcripción del testimonio inicial.
-        </p>
-      <% end %>
-    <% end %>
+        <section class="case-review__card" aria-labelledby="files-title">
+          <h2 id="files-title">
+            <span class="case-review__icon">
+              <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+            </span>
+            Archivos del caso
+          </h2>
+
+          <% if @case.case_files.any? %>
+            <ul class="case-review__files">
+              <% @case.case_files.each do |case_file| %>
+                <li>
+                  <span class="case-review__file-icon">
+                    <i class="fa-solid fa-file" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <strong><%= case_file.title.presence || file_type_labels.fetch(case_file.file_type) %></strong>
+                    <small><%= file_type_labels.fetch(case_file.file_type, case_file.file_type.humanize) %></small>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="case-review__empty">Aún no hay archivos agregados.</p>
+          <% end %>
+        </section>
+      </main>
+
+      <aside class="case-review__user-sidebar">
+        <section class="case-review__card" aria-labelledby="case-details-title">
+          <h2 id="case-details-title">
+            <span class="case-review__icon">
+              <i class="fa-solid fa-user" aria-hidden="true"></i>
+            </span>
+            Datos personales
+          </h2>
+
+          <dl class="case-review__person-data">
+            <div>
+              <dt>Nombre</dt>
+              <dd><%= [@case.user.name, @case.user.last_name].compact.join(" ").presence || "No capturado" %></dd>
+            </div>
+            <div>
+              <dt>Ubicación</dt>
+              <dd><%= [@case.user.city, @case.user.state].compact.join(", ").presence || "No capturada" %></dd>
+            </div>
+            <div>
+              <dt>Teléfono</dt>
+              <dd><%= @case.user.phone_number.presence || "No capturado" %></dd>
+            </div>
+          </dl>
+        </section>
+
+        <% if @case.editable_by_user? %>
+          <section class="case-review__card case-review__user-actions" aria-labelledby="case-actions-title">
+            <h2 id="case-actions-title">Siguientes pasos</h2>
+
+            <% if @case.opening_testimony&.transcript.present? %>
+              <%= link_to "Revisar transcripción y enviar",
+                          review_transcription_case_path(@case),
+                          class: "case-review__button" %>
+            <% else %>
+              <%= link_to "Grabar testimonio",
+                          new_case_case_file_path(@case),
+                          class: "case-review__button" %>
+            <% end %>
+
+            <%= link_to "Editar información",
+                        edit_case_path(@case),
+                        class: "case-review__button case-review__button--secondary" %>
+          </section>
+        <% end %>
+      </aside>
+    </div>
   <% end %>
 </div>
