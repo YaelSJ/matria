@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Matria" %></title>
+    <title><%= content_for(:title) || "Matria - Red de apoyo y acompañamiento" %></title>
+    <!-- Configuración del Favicon -->
+    <%= favicon_link_tag "favicon.png", rel: "icon", type: "image/png" %>
+    <!-- Metaetiqueta de descripción para búsqueda -->
+  <meta name="description" content="<%= content_for(:description) || 'Red de apoyo del FNCVV, dedicada a brindar acompañamiento integral y herramientas comunitarias para mujeres que estan viviendo situación de violencia vicaria' %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Matria">
@@ -14,8 +18,7 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+<%#     <link rel="icon" href="/icon.png" type="image/png"> <link rel="icon" href="/icon.svg" type="image/svg+xml"> %>
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
