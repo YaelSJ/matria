@@ -1,9 +1,9 @@
 <% risk_labels = {
-  "critical" => "Crítico",
+  "low" => "Bajo",
   "high" => "Alto",
-  "medium" => "Medio",
-  "low" => "Bajo"
-} %>
+  "moderate" => "Moderado",
+  "extreme" => "Extremo"
+}.freeze %>
 
 <% status_labels = {
   "pending_review" => "Pendiente",
@@ -42,7 +42,7 @@
                 class: "representative-dashboard__metric representative-dashboard__metric--urgent" do %>
       <p>Urgente</p>
       <strong><%= @urgent_cases_count %></strong>
-      <span>Riesgo alto y crítico</span>
+      <span>Riesgo alto y extremo</span>
     <% end %>
 
     <%= link_to dashboard_path(case_query.merge(
