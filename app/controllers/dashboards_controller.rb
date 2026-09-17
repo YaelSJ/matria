@@ -38,7 +38,7 @@ class DashboardsController < ApplicationController
 
     # Urgentes: riesgo alto/crítico, sin asignar o asignados que siguen pendientes.
     @urgent_cases_count = @active_state_cases
-                          .where(risk_level: %w[high critical])
+                          .where(risk_level: %w[high extreme])
                           .where(
                             "representative_id IS NULL OR status = ?",
                             "pending_review"
@@ -54,7 +54,7 @@ class DashboardsController < ApplicationController
     # Filtros de la tabla “Mis casos”.
     @case_scope = params[:case_scope] == "unassigned" ? "unassigned" : "assigned"
 
-    @selected_risk = if %w[low medium high critical].include?(params[:risk])
+    @selected_risk = if %w[low moderate high extreme].include?(params[:risk])
                        params[:risk]
                      end
 

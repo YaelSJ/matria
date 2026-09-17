@@ -2,9 +2,9 @@
   <% if current_user.representative? || current_user.admin? %>
     <% risk_labels = {
       "low" => "Bajo",
-      "medium" => "Medio",
+      "moderate" => "Moderado",
       "high" => "Alto",
-      "critical" => "Crítico"
+      "extreme" => "Extremo"
     } %>
 
     <% file_icons = {

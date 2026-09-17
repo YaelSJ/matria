@@ -20,7 +20,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".alert-info", count: 0
 
     get request.path
-    assert_select "dialog.registration-success", count: 0
+    assert_select "dialog.welcome-video", count: 0
   end
 
   test "invalid registration does not show a success confirmation" do
@@ -31,7 +31,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert_select "dialog.registration-success", count: 0
+    assert_select "dialog.welcome-video", count: 0
     assert_nil flash[:registration_success]
   end
   test "registration renders ordered location lists without gender or sex" do
