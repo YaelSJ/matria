@@ -1,18 +1,22 @@
 <dialog class="registration-success"
         data-controller="registration-success"
+        data-action="close->registration-success#stopVideo cancel->registration-success#stopVideo turbo:before-cache@document->registration-success#stopVideo"
         data-turbo-temporary
-        aria-labelledby="registration-success-title"
-        aria-describedby="registration-success-description">
-  <%= image_tag "ok_matria.png", class: "registration-success__image", alt: "", width: 180, height: 180 %>
+        aria-labelledby="registration-success-title">
+  <div class="registration-success__video-crop">
+    <video class="registration-success__video"
+           data-registration-success-target="video"
+           data-action="ended->registration-success#finish error->registration-success#videoFailed"
+           playsinline preload="auto" disablepictureinpicture disableremoteplayback
+           aria-label="Video de bienvenida a MatrIA">
+      <source src="/videos/matria-saludo.mp4" type="video/mp4">
+    </video>
+  </div>
 
-  <h2 id="registration-success-title" class="registration-success__title">
-    ¡Bienvenida!
-  </h2>
-  <p id="registration-success-description" class="registration-success__description">
-    Me da gusto que estés aquí nuevamente.
-  </p>
+  <h2 id="registration-success-title" class="registration-success__title">Registro Exitoso</h2>
 
-  <form method="dialog">
-    <button type="submit" class="registration-success__continue" autofocus>Continuar</button>
-  </form>
+  <button type="button" class="registration-success__continue"
+          data-registration-success-target="button"
+          data-action="registration-success#play"
+          autofocus>¡Continuemos!</button>
 </dialog>

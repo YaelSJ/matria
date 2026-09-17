@@ -15,7 +15,10 @@ class User < ApplicationRecord
     admin: "admin"
   }, default: :user
 
+  attr_accessor :require_registration_location
+
   validates :role, presence: true
+  validate :registration_location_is_valid, if: :require_registration_location
 
   after_create :create_case_for_user, if: :user?
 
@@ -28,6 +31,16 @@ class User < ApplicationRecord
   end
 
   private
+
+  def registration_location_is_valid
+    errors.add(:user_country, "selecciona México de la lista") unless user_country == MexicanLocations::COUNTRY
+
+    errors.add(:state, "selecciona un estado de la lista") unless MexicanLocations.states.include?(state)
+
+    return if MexicanLocations.municipalities(state).include?(city)
+
+    errors.add(:city, "selecciona un municipio o alcaldía del estado elegido")
+  end
 
   def create_case_for_user
     Case.create!(

@@ -1,41 +1,62 @@
 <%= turbo_frame_tag "transcription_review" do %>
   <% if case_file&.transcript.present? %>
     <%= form_with url: confirm_transcription_case_path(case_record),
-                  method: :post, data: { turbo_frame: "_top" } do %>
+                  method: :post, data: { turbo_frame: "_top" },
+                  class: "transcription-review__form" do %>
+      <section class="transcription-review__editor" aria-labelledby="transcript-label">
+        <div class="transcription-review__section-heading">
+          <span class="transcription-review__icon" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></span>
+          <div>
+            <%= label_tag :transcript, "Tu transcripción", id: "transcript-label", class: "transcription-review__label" %>
+            <p id="transcript-help">Este texto es editable. Revísalo a tu ritmo.</p>
+          </div>
+        </div>
 
-      <%= label_tag :transcript, "Tu transcripción",
-                    class: "d-block mb-2" %>
-
-      <%= text_area_tag :transcript,
-                        transcript.nil? ? case_file.transcript : transcript,
-                        rows: 12,
-                        required: true,
-                        class: "form-control mb-4" %>
-
-      <p id="consent-explanation">
-        Las representantes podrán ver tu nombre, teléfono, un resumen
-        generado por IA, tu testimonio completo y los archivos de tu caso.
-        Debes aceptar este consentimiento para enviar el caso a revisión.
-      </p>
-
-      <div class="form-check mb-4">
-        <%= hidden_field_tag :consent, "0" %>
-
-        <%= check_box_tag :consent, "1", consent == true,
+        <%= text_area_tag :transcript,
+                          transcript.nil? ? case_file.transcript : transcript,
+                          rows: 12,
                           required: true,
-                          class: "form-check-input",
-                          aria: { describedby: "consent-explanation" } %>
+                          aria: { describedby: "transcript-help" },
+                          class: "form-control transcription-review__textarea" %>
+      </section>
 
-        <%= label_tag :consent,
-                      "Autorizo a las representantes de mi estado a consultar mi testimonio completo y los archivos de mi caso.",
-                      class: "form-check-label" %>
+      <section class="transcription-review__consent" aria-labelledby="consent-title">
+        <div class="transcription-review__section-heading">
+          <span class="transcription-review__icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+          <h2 id="consent-title">Tú decides compartir</h2>
+        </div>
+        <p id="consent-explanation">
+          Las representantes podrán ver tu nombre, teléfono, un resumen
+          generado por IA, tu testimonio completo y los archivos de tu caso.
+          Debes aceptar este consentimiento para enviar el caso a revisión.
+        </p>
+
+        <div class="transcription-review__checkbox">
+          <%= hidden_field_tag :consent, "0", id: nil %>
+          <%= check_box_tag :consent, "1", consent == true,
+                            required: true,
+                            class: "form-check-input",
+                            aria: { describedby: "consent-explanation" } %>
+          <%= label_tag :consent,
+                        "Autorizo a las representantes de mi estado a consultar mi testimonio completo y los archivos de mi caso.",
+                        class: "form-check-label" %>
+        </div>
+      </section>
+
+      <div class="transcription-review__actions">
+        <p>Cuando estés lista, da el siguiente paso.</p>
+        <%= submit_tag "Confirmar y continuar",
+                        class: "transcription-review__submit",
+                        data: { turbo_submits_with: "Enviando…" } %>
       </div>
-
-      <%= submit_tag "Confirmar y continuar",
-                      class: "dashboard__button",
-                      data: { turbo_submits_with: "Enviando…" } %>
     <% end %>
   <% else %>
-    <p>Estamos trabajando en tu audio. Esto puede tomar unos segundos.</p>
+    <section class="transcription-review__waiting" role="status" aria-live="polite">
+      <span class="transcription-review__icon" aria-hidden="true"><i class="fa-solid fa-headphones"></i></span>
+      <h2>Tu transcripción</h2>
+      <p>Gracias por compartirme esto, estoy anotando todo y en un momento lo tendré listo, puedes revisar y corregir en caso de que tenga algún error</p>
+      <div class="transcription-review__wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <p class="transcription-review__waiting-note">El texto aparecerá aquí cuando esté listo.</p>
+    </section>
   <% end %>
 <% end %>

@@ -1,21 +1,27 @@
-<div class="case-review">
-  <h1>Revisa tu transcripción</h1>
+<% content_for :title, "Revisa tu transcripción | MatrIA" %>
 
-  <p>
-    Lee tu testimonio y corrige lo que necesites.
-    Al confirmar, enviaremos tu caso a revisión
-    a las representantes de tu estado.
-  </p>
+<div class="transcription-review">
+  <div class="transcription-review__container">
+    <header class="transcription-review__header">
+      <%= image_tag "compu_matria.png", alt: "", class: "transcription-review__illustration", width: 301, height: 401 %>
+      <h1>Estoy contigo, eres muy valiente!</h1>
+      <p>Lee tu testimonio y corrige lo que necesites. Al confirmar, enviaremos tu caso a revisión a las representantes de tu estado.</p>
+    </header>
 
-  <% opening_testimony = @case.opening_testimony %>
+    <div class="transcription-review__layout">
+      <div class="transcription-review__main">
+        <% opening_testimony = @case.opening_testimony %>
 
-  <% if opening_testimony %>
-    <%= turbo_stream_from opening_testimony %>
-  <% end %>
+        <% if opening_testimony %>
+          <%= turbo_stream_from opening_testimony %>
+        <% end %>
 
-  <%= render "transcription_review",
-            case_record: @case,
-            case_file: opening_testimony,
-            transcript: @transcript,
-            consent: @consent %>
+        <%= render "transcription_review",
+                  case_record: @case,
+                  case_file: opening_testimony,
+                  transcript: @transcript,
+                  consent: @consent %>
+      </div>
+    </div>
+  </div>
 </div>
