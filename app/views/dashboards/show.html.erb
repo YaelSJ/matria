@@ -40,7 +40,7 @@
 
         <div class="user-dashboard__shortcuts">
           <button type="button" class="user-dashboard__shortcut">
-            <span class="user-dashboard__shortcut-icon" aria-hidden="true">
+            <span class="user-dashboard__shortcut-icon">
               <i class="fa-regular fa-comment"></i>
             </span>
 
@@ -55,7 +55,7 @@
           </button>
 
           <button type="button" class="user-dashboard__shortcut">
-            <span class="user-dashboard__shortcut-icon" aria-hidden="true">
+            <span class="user-dashboard__shortcut-icon">
               <i class="fa-regular fa-file"></i>
             </span>
 
@@ -78,7 +78,11 @@
       </section>
 
     <% elsif current_user.representative? || current_user.admin? %>
-      <%= render "representative" %>
+      <%= turbo_frame_tag "representative_dashboard",
+                          target: "_top",
+                          data: { turbo_action: "advance" } do %>
+        <%= render "representative" %>
+      <% end %>
     <% end %>
   </div>
 </div>
