@@ -1,4 +1,6 @@
 <% if flash[:registration_success] %>
+  <%= render "shared/welcome_video" %>
+<% elsif flash[:login_success] %>
   <%= render "shared/registration_success" %>
 <% end %>
 <% if notice %>

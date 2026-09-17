@@ -110,3 +110,51 @@
     transition: none;
   }
 }
+
+.welcome-video {
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 20px;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 24px;
+  background: #fff;
+  color: #321d32;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+
+  &::backdrop {
+    background: rgba(35, 20, 40, 0.45);
+    backdrop-filter: blur(4px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $matria-purple;
+    outline-offset: 3px;
+  }
+
+  &__player {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    max-height: calc(100dvh - 160px);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: #fff;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+  }
+
+  &__message {
+    margin: 16px 0 0;
+    font-size: 1rem;
+    line-height: 1.5;
+
+    &:empty { display: none; }
+  }
+}

@@ -10,12 +10,12 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to new_case_case_file_path(User.find_by!(email: "welcome@example.com").case)
     follow_redirect!
-    assert_select "dialog.registration-success", count: 1
-    assert_select "dialog img[src*='ok_matria']", count: 1
+    assert_select "dialog.welcome-video", count: 1
+    assert_select "dialog video[src='/videos/Matria_saludo_web.mp4']", count: 1
     assert_select ".alert-info", count: 0
 
     get request.path
-    assert_select "dialog.registration-success", count: 0
+    assert_select "dialog.welcome-video", count: 0
   end
 
   test "invalid registration does not show a success confirmation" do
@@ -26,7 +26,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert_select "dialog.registration-success", count: 0
+    assert_select "dialog.welcome-video", count: 0
     assert_nil flash[:registration_success]
   end
 end
