@@ -79,10 +79,12 @@
         <div class="representative-dashboard__controls">
           <%= link_to "Asignados",
                       dashboard_path(case_query.merge(activity_scope: "assigned")),
+                      data: { turbo_frame: "representative_dashboard" },
                       class: ("is-active" if @activity_scope == "assigned") %>
 
           <%= link_to "Sin asignar",
                       dashboard_path(case_query.merge(activity_scope: "unassigned")),
+                      data: { turbo_frame: "representative_dashboard" },
                       class: ("is-active" if @activity_scope == "unassigned") %>
         </div>
       </div>
@@ -92,10 +94,12 @@
 
         <%= link_to "Más reciente",
                     dashboard_path(case_query.merge(activity_order: "newest")),
+                    data: { turbo_frame: "representative_dashboard" },
                     class: ("is-active" if @activity_order == "newest") %>
 
         <%= link_to "Más antiguo",
                     dashboard_path(case_query.merge(activity_order: "oldest")),
+                    data: { turbo_frame: "representative_dashboard" },
                     class: ("is-active" if @activity_order == "oldest") %>
       </div>
 
@@ -155,16 +159,21 @@
         <div class="representative-dashboard__controls">
           <%= link_to "Asignados",
                       dashboard_path(case_query.merge(case_scope: "assigned")),
+                      data: { turbo_frame: "representative_dashboard" },
                       class: ("is-active" if @case_scope == "assigned") %>
 
           <%= link_to "Sin asignar",
                       dashboard_path(case_query.merge(case_scope: "unassigned")),
+                      data: { turbo_frame: "representative_dashboard" },
                       class: ("is-active" if @case_scope == "unassigned") %>
         </div>
       </div>
 
       <div class="representative-dashboard__case-filters">
-        <%= form_with url: dashboard_path, method: :get, local: true do |form| %>
+        <%= form_with url: dashboard_path,
+                      method: :get,
+                      local: true,
+                      data: { turbo_frame: "representative_dashboard" } do |form| %>
           <%= form.hidden_field :case_scope, value: @case_scope %>
           <%= form.hidden_field :case_order, value: @case_order %>
           <%= form.hidden_field :activity_scope, value: @activity_scope %>
@@ -183,10 +192,12 @@
         <div class="representative-dashboard__sort">
           <%= link_to "Más antiguo",
                       dashboard_path(case_query.merge(case_order: "oldest")),
+                      data: { turbo_frame: "representative_dashboard" },
                       class: ("is-active" if @case_order == "oldest") %>
 
           <%= link_to "Más reciente",
                       dashboard_path(case_query.merge(case_order: "newest")),
+                      data: { turbo_frame: "representative_dashboard" },
                       class: ("is-active" if @case_order == "newest") %>
         </div>
       </div>
