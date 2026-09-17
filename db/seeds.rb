@@ -84,17 +84,17 @@ scenarios = [
   # user1: caso en borrador sin audio ni transcripción, listo para grabar.
   { status: :draft, risk_level: :low, consent: false, transcript: nil },
   # user2: transcripción disponible para revisar, editar y dar consentimiento.
-  { status: :draft, risk_level: :medium, consent: false,
+  { status: :draft, risk_level: :moderate, consent: false,
     transcript: "Este es un testimonio ficticio para revisar antes de otorgar el consentimiento." },
-  { status: :pending_review, risk_level: :critical, consent: true,
+  { status: :pending_review, risk_level: :extreme, consent: true,
     transcript: "Testimonio ficticio de un caso urgente, pendiente de asignación." },
   { status: :pending_review, risk_level: :high, consent: true, representative: representatives[0],
     transcript: "Testimonio ficticio de un caso pendiente y ya asignado." },
-  { status: :in_review, risk_level: :medium, consent: true, representative: representatives[0],
+  { status: :in_review, risk_level: :moderate, consent: true, representative: representatives[0],
     transcript: "Testimonio ficticio de un caso que está siendo revisado." },
   { status: :changes_requested, risk_level: :low, consent: true, representative: representatives[1],
     transcript: "Testimonio ficticio con información adicional pendiente." },
-  { status: :approved, risk_level: :medium, consent: true, representative: representatives[1],
+  { status: :approved, risk_level: :moderate, consent: true, representative: representatives[1],
     transcript: "Testimonio ficticio de un caso aprobado." },
   { status: :closed, risk_level: :high, consent: true, representative: representatives[2],
     transcript: "Testimonio ficticio de un caso cerrado." }

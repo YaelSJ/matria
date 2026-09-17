@@ -25,7 +25,7 @@ class Case < ApplicationRecord
   validates :status, presence: true
   validates :consent, inclusion: { in: [true, false] }
   validates :risk_level,
-            inclusion: { in: %w[low medium high critical] }
+            inclusion: { in: %w[low moderate high extreme] }
 
   def ready_for_submission?
     consent? && opening_testimony&.transcript.present?
