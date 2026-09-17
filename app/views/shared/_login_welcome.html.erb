@@ -1,0 +1,14 @@
+<dialog class="login-welcome"
+        data-controller="login-welcome"
+        data-turbo-temporary
+        aria-labelledby="login-welcome-title"
+        aria-describedby="login-welcome-description">
+  <%= image_tag "ok_matria.png", class: "login-welcome__image", alt: "", width: 180, height: 180 %>
+
+  <h2 id="login-welcome-title" class="registration-success__title">Bienvenida</h2>
+  <p id="login-welcome-description" class="login-welcome__description">Me da gusto verte nuevamente</p>
+
+  <form method="dialog">
+    <button type="submit" class="registration-success__continue" autofocus>¡Continuemos!</button>
+  </form>
+</dialog>

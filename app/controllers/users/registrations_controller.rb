@@ -2,6 +2,11 @@ module Users
   class RegistrationsController < Devise::RegistrationsController
     protected
 
+    def build_resource(attributes = {})
+      super
+      resource.require_registration_location = true
+    end
+
     def after_sign_up_path_for(resource)
       flash.delete(:notice)
       flash[:registration_success] = true

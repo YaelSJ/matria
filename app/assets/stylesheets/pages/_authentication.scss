@@ -150,3 +150,24 @@
     }
   }
 }
+
+.authentication {
+  &__location-hint {
+    margin: -4px 0 20px;
+    color: rgba($matria-charcoal, .75);
+    font-size: .9rem;
+    line-height: 1.6;
+  }
+
+  .form-select {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+
+    &:disabled {
+      background-color: $matria-background;
+      color: #655c6c;
+      cursor: not-allowed;
+    }
+  }
+}

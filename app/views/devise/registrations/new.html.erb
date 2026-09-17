@@ -50,43 +50,54 @@
                 class: "authentication__field--full"
               }
             ) %>
-
-            <%= f.input(
-              :gender,
-              label: "Género"
-            ) %>
-
-            <%= f.input(
-              :sex,
-              label: "Sexo"
-            ) %>
           </div>
         </fieldset>
 
-        <fieldset class="authentication__section">
-          <legend class="authentication__section-title">
-            Ubicación
-          </legend>
+        <fieldset class="authentication__section"
+                  data-controller="registration-location"
+                  data-registration-location-catalog-value="<%= MexicanLocations.options.to_json %>">
+          <legend class="authentication__section-title">Ubicación</legend>
+          <p class="authentication__location-hint" id="location-help">
+            Selecciona tu país, después tu estado y tu municipio o alcaldía.
+          </p>
 
           <div class="authentication__grid">
-            <%= f.input(
-              :state,
-              label: "Estado / Provincia"
-            ) %>
+            <%= f.input :user_country,
+                        label: "País",
+                        as: :select,
+                        collection: [MexicanLocations::COUNTRY],
+                        prompt: "Selecciona tu país",
+                        required: true,
+                        wrapper_html: { class: "authentication__field--full" },
+                        input_html: {
+                          autocomplete: "country-name",
+                          aria: { describedby: "location-help" },
+                          data: { registration_location_target: "country", action: "change->registration-location#countryChanged" }
+                        } %>
 
-            <%= f.input(
-              :city,
-              label: "Ciudad"
-            ) %>
+            <%= f.input :state,
+                        label: "Estado",
+                        as: :select,
+                        collection: MexicanLocations.states,
+                        prompt: "Selecciona tu estado",
+                        required: true,
+                        disabled: resource.user_country != MexicanLocations::COUNTRY,
+                        input_html: {
+                          autocomplete: "address-level1",
+                          data: { registration_location_target: "state", action: "change->registration-location#stateChanged" }
+                        } %>
 
-            <%= f.input(
-              :user_country,
-              label: "País",
-              as: :string,
-              wrapper_html: {
-                class: "authentication__field--full"
-              }
-            ) %>
+            <%= f.input :city,
+                        label: "Municipio / Alcaldía",
+                        as: :select,
+                        collection: MexicanLocations.municipalities(resource.state),
+                        prompt: "Selecciona tu municipio o alcaldía",
+                        required: true,
+                        disabled: resource.user_country != MexicanLocations::COUNTRY || !MexicanLocations.states.include?(resource.state),
+                        input_html: {
+                          autocomplete: "address-level2",
+                          data: { registration_location_target: "city" }
+                        } %>
           </div>
         </fieldset>
 
