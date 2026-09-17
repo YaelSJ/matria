@@ -31,4 +31,19 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".alert-info", count: 0
     assert_select "dialog.registration-success", count: 0
   end
+
+  test "representative login does not show the registration video" do
+    representative = User.create!(
+      email: "representative@example.com",
+      password: "password123",
+      role: :representative
+    )
+
+    post user_session_path, params: { user: { email: representative.email, password: "password123" } }
+
+    assert_redirected_to dashboard_path
+    follow_redirect!
+    assert_select "dialog.registration-success", count: 0
+    assert_select "video source[src='/videos/matria-saludo.mp4']", count: 0
+  end
 end

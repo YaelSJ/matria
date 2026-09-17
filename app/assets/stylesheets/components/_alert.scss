@@ -5,6 +5,64 @@
   z-index: 1000;
 }
 
+// The welcome clip is a landscape video.  Keep the dialog constrained to the
+// viewport instead of letting the browser use the video's intrinsic size.
+.welcome-video {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0 0 24px;
+  overflow: hidden;
+  border: 0;
+  background: white;
+
+  &::backdrop {
+    background: white;
+  }
+
+  &__player {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: white;
+  }
+
+  &__message {
+    margin: 0;
+    padding: 12px 20px;
+    justify-self: center;
+    border-radius: 999px;
+    background: $matria-purple;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba($matria-charcoal, 0.2);
+  }
+}
+
+// A landscape source would otherwise be tiny on a portrait phone.  Cropping
+// its empty side space keeps the person central and fills the available area.
+@media (max-aspect-ratio: 1 / 1) {
+  .welcome-video {
+    gap: 12px;
+    padding-bottom: 20px;
+
+    &__player {
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+}
+
 .registration-success {
   position: fixed;
   inset: 0;
