@@ -1,0 +1,24 @@
+<dialog class="welcome-video"
+        data-controller="welcome-video"
+        data-turbo-temporary
+        data-action="click@window->welcome-video#play keydown.enter->welcome-video#play keydown.space->welcome-video#play cancel->welcome-video#preventClose"
+        aria-label="Bienvenida a MatrIA"
+        aria-describedby="welcome-video-message"
+        tabindex="0">
+  <video class="welcome-video__player"
+         data-welcome-video-target="video"
+         data-action="ended->welcome-video#finish error->welcome-video#showError contextmenu->welcome-video#preventClose"
+         src="/videos/Matria_saludo_web.mp4"
+         preload="auto"
+         playsinline
+         disablepictureinpicture
+         disableremoteplayback
+         aria-label="Video de bienvenida a MatrIA">
+  </video>
+  <p id="welcome-video-message"
+     class="welcome-video__message"
+     data-welcome-video-target="message"
+     role="status">
+    Da click
+  </p>
+</dialog>
