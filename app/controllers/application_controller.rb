@@ -9,7 +9,9 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     flash.delete(:notice)
-    flash[:login_success] = true
+    # The registration video is intended for people receiving support, not
+    # representatives or administrators accessing their work dashboard.
+    flash[:login_success] = true if resource.user?
 
     dashboard_path
   end
