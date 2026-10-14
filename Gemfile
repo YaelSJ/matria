@@ -80,5 +80,5 @@ gem "cloudinary"
 
 gem "whispercpp"
 gem "openai"
-gem "ruby_llm", "~> 1.16.0"
+gem "ruby_llm", "~> 2.1.0"
 
